@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./pizzarree_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./pizzarree_backend:/app
+    command: python manage.py runserver 0.0.0.0:8000
+
+  frontend:
+    build:
+      context: ./pizzarree_frontend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./pizzarree_frontend:/app
+    command: npm run serve
+    depends_on:
+      - backend

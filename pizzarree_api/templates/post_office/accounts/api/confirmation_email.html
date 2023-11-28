@@ -1,0 +1,15 @@
+{% extends 'post_office/base_email.html' %}
+{% load i18n %}
+
+{% block subject %}
+    {% translate "Auto Reply" %}
+{% endblock %}
+
+{% block body %}
+    <div style="padding: 1rem;">
+        <p style="font-weight:bolder;">{% translate "Hi" %} <strong style="font-style: italic;">{{ name }},</strong></p>
+        <p>{% translate "We got your inquiry, we will get back to you the soonest" %}</p>
+        {{ message }}
+    </div>
+
+{% endblock %}

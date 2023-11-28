@@ -1,10 +1,13 @@
 .DS_Store
 .thumbs.db
+.venv/
 node_modules
-
+.vscode
 # Quasar core related directories
 .quasar
 /dist
+__pycache__/
+db.sqlite3
 /quasar.config.*.temporary.compiled*
 
 # Cordova related directories and files
