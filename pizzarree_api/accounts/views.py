@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import render
 from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
@@ -49,11 +48,7 @@ class AuthTokenLogin(ObtainAuthToken):
         token, created = Token.objects.get_or_create(user=user)
         user.last_login = timezone.now()
         user.save(update_fields=['last_login'])
-
-        # new_device, device_serializer = self.check_new_device_access(request, user)
-        # Activity().record(user, self.__class__.__name__)
         return Response({
-            # 'new_device': device_serializer.data if new_device else False,
             'token': token.key,
             'is_active': user.is_active,
             'user_id': user.pk,
@@ -63,16 +58,6 @@ class AuthTokenLogin(ObtainAuthToken):
             'email_verified': user.profile.email_verified,
             'preference': user.profile.preference
         })
-
-    # @staticmethod
-    # def check_new_device_access(request, user):
-    #     new_device = Device().check_device_signature(request, user)
-    #     device_serializer = serializers.DeviceSerializer()
-    #     if new_device:
-    #         device_serializer = serializers.DeviceSerializer(new_device)
-    #         new_device.notify_user(request, new_device, user=user,
-    #                                email_template='post_office/accounts/api/device_changed_email.html')
-    #     return new_device, device_serializer
 
 
 class AuthLoginStep(APIView):
@@ -108,7 +93,6 @@ class AccountActivation(PasswordAPIView):
             user.is_active = True
             user.profile.email_verified = True
             user.save()
-            # Activity().record(user, self.__class__.__name__)
             self.message = "?level=success&message=" + _('Your account is now active')
             return self.predict_http_response()
 
@@ -124,7 +108,6 @@ class ActivationRequest(APIView, BuildRedirectionUrl):
         user = get_object_or_404(User, pk=kwargs.get('pk'))
         if not user.profile.email_verified:
             send_verification_email(request, user)
-            # Activity().record(user, self.__class__.__name__)
         self.message = "?level=success&message=" + \
                        _('Verification email has been sent to {}, please click the activation link').format(user.email)
         self.url_extension = "done"
@@ -140,8 +123,6 @@ class AuthUserProfile(APIView):
     def post(self, request, format=None):
         serializer = serializers.ProfileUserSerializer(request.user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        # Activity().record(request.user, 'ProfileUpdate %s'
-        #                   % changed_fields(request.user, serializer.validated_data, []))
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -174,7 +155,6 @@ class PasswordResetRequest(APIView):
             send_verification_email(request, user[0],
                                     token_generator=password_reset_token,
                                     template_name=self.email_template_name)
-            # Activity().record(user[0], self.__class__.__name__)
         return Response({'data': _("Reset password email has been sent to %s, please check your email.") % request.data
                         .get('email')}, status.HTTP_202_ACCEPTED)
 
@@ -186,7 +166,6 @@ class ResetPasswordConfirm(PasswordAPIView):
         user = self.get_user(uidb64)
         if user is not None and password_reset_token.check_token(user, token):
             auth_token = Token.objects.get_or_create(user=user)[0]
-            # Activity().record(user, self.__class__.__name__)
             self.message = '?auth_token={}'.format(auth_token)
             self.url_extension = 'user/password_reset_confirm'
             return self.predict_http_response()
