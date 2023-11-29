@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'accounts',
     'shop',
+    'taggit',
     'django_phonenumbers',
     'rest_framework',
     'rest_framework.authtoken',
@@ -165,7 +166,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
-
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20
 }
 
 STRIPE_API_KEY = os.getenv('DJANGO_STRIPE_API_KEY', 'pk_test_RUZqAN8CkTK39VGr7FuIxPWE')
