@@ -169,6 +169,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20
 }
+CART_SESSION_ID = 'cart'
 
 STRIPE_API_KEY = os.getenv('DJANGO_STRIPE_API_KEY', 'pk_test_RUZqAN8CkTK39VGr7FuIxPWE')
 STRIPE_API_SECRET = os.getenv('DJANGO_STRIPE_API_KEY', 'sk_test_CHbkFTgQWREZlA5ff17sCy1Q')

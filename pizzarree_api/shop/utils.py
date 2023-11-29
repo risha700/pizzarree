@@ -1,6 +1,8 @@
 import django_filters
 from django.utils import timezone
-from shop.models import Product
+from rest_framework import filters
+
+from shop.models import Product, Coupon
 from faker import Faker
 
 fake = Faker()
@@ -24,15 +26,26 @@ class ProductFactory:
                                        description=fake.paragraph(nb_sentences=1), published=published)
 
 
-# class CouponFactory:
-#     def __init__(self, count_coupons=3, active=True, coupon_type=Coupon.COUPON_TYPES[1]):
-#         for _ in range(count_coupons):
-#             Coupon.objects.create(code=fake.word(), discount=fake.random_number(digits=2),
-#                                   valid_from=fake.date_time_this_month(tzinfo=fake.pytimezone()),
-#                                   valid_to=fake.future_datetime(tzinfo=fake.pytimezone()),
-#                                   discount_type=coupon_type, active=active)
+class CouponFactory:
+    def __init__(self, count_coupons=3, active=True, coupon_type=Coupon.COUPON_TYPES[1]):
+        for _ in range(count_coupons):
+            Coupon.objects.create(code=fake.word(), discount=fake.random_number(digits=2),
+                                  valid_from=fake.date_time_this_month(tzinfo=fake.pytimezone()),
+                                  valid_to=fake.future_datetime(tzinfo=fake.pytimezone()),
+                                  discount_type=coupon_type, active=active)
 
 
 class ProductFilterClass(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')
     slug = django_filters.CharFilter(lookup_expr='icontains')
+
+class OrderUUIDAuthedFilter(filters.BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        identifier = request.query_params.get('identifier', None)
+        order_email = request.query_params.get('order_email', None)
+        if identifier:
+            if request.user.is_anonymous:
+                queryset = queryset.filter(identifier=identifier, email=order_email).distinct()
+            else:
+                queryset = queryset.filter(identifier=identifier, email=request.user.email).distinct()
+        return queryset

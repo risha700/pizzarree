@@ -1,11 +1,15 @@
+from importlib import import_module
+
+from django.conf import settings
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
-from shop.models import Product
-from shop.utils import ProductFactory
+from shop.models import Product, Coupon, Order
+from shop.models.cart import Cart
+from shop.utils import ProductFactory, CouponFactory
 
 User = get_user_model()
 
@@ -56,3 +60,92 @@ class ProductTestCase(TestCase):
         self.assertEqual(response.json().get('count'), 4)
         self.assertFalse(Product.objects.first().published)
         self.assertTrue(Product.objects.last().published)
+
+
+get_cart = lambda res: Cart(res.wsgi_request)
+engine = import_module(settings.SESSION_ENGINE)
+session = engine.SessionStore()
+
+
+class OrderTestCase(TestCase):
+    def setUp(self) -> None:
+        self.test_user = User.objects.create(username='test_user', email='testuser@test.com',
+                                             password='rrrr', phone='+16469061833', is_staff=False,
+                                             is_superuser=False, is_active=True)
+        self.client = APIClient(enforce_csrf_checks=False)
+        ProductFactory(10, False, tags=['computers', 'phones'])
+        self.products = Product.objects.all()
+        CouponFactory(1, active=False)
+        CouponFactory(2)
+        self.coupons = Coupon.objects.all()
+
+    def tearDown(self) -> None:
+        session.clear()
+
+    def test_order_create(self):
+        p = Product.objects.get(id=self.products[1].id)
+        p.stock = 10
+        p.save()
+        self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.products[0].id}))
+        self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.products[1].id}), {
+            'quantity': 3
+        })
+        self.client.post(reverse('api-shop:cart-apply-coupon'), {'coupon_code': self.coupons.last().code})
+        response = self.client.post(reverse('api-shop:order-list'), {
+            'email': 'rs@test.local',
+            'shipping_address': {'first_name': 'mr', 'last_name': 'risha', 'address': '99 main st',
+                                 'postal_code': '12345', 'city': 'NY', 'country': 'USA', 'address_type': 'SHIPPING'}
+        }, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        order = Order.objects.last()
+        self.assertEqual(order.shipping_address.last_name, 'risha')
+        self.assertEqual(order.items.count(), 2)
+        self.assertEqual(order.items.get(product_id=self.products[1].id).quantity, 3)
+
+        # scenario 2 order is pending payment will update in place
+        self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.products[1].id}), {
+            'quantity': 1, 'update': True
+        })
+        self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.products[7].id}))
+        response = self.client.post(reverse('api-shop:order-list'), {
+            'email': 'rs@test.local',
+            'shipping_address': {'first_name': 'mr', 'last_name': 'r!sh@', 'address': '100 main st',
+                                 'postal_code': '12345', 'city': 'NY', 'country': 'USA', 'address_type': 'SHIPPING'},
+            'billing_address': {'first_name': 'mr', 'last_name': 'risha', 'address': '100 main st',
+                                'postal_code': '12345', 'city': 'NY', 'country': 'USA', 'address_type': 'BILLING'}
+        }, format='json')
+        order.refresh_from_db()
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        self.assertEqual(order.items.count(), 3)
+        # self.assertEqual(order.shipping_address.address, '100 main st')
+        self.assertEqual(order.shipping_address.last_name, 'r!sh@')
+        self.assertEqual(order.billing_address.last_name, 'risha')
+
+        self.assertEqual(order.items.get(product_id=self.products[1].id).quantity, 1)
+        #
+        # scenario 3 remove item
+        self.client.post(reverse('api-shop:cart-remove', kwargs={'product_id': self.products[0].id}))
+        res = self.client.post(reverse('api-shop:order-list'), {'email': 'rs@test.local'})
+        order.refresh_from_db()
+        with self.assertRaises(Exception):
+            order.items.get(product_id=self.products[0].id)
+        self.assertEqual(order.items.count(), 2)
+
+
+    # def test_admins_can_view_all_orders(self):
+    #     p = Product.objects.get(id=self.products[1].id)
+    #     p.stock = 10
+    #     p.save()
+    #     session.clear()
+    #     self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.products[0].id}))
+    #     self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.products[1].id}), {
+    #         'quantity': 3
+    #     })
+    #     self.client.post(reverse('api-shop:cart-apply-coupon'), {'coupon_code': self.coupons.last().code})
+    #
+    #     response = self.client.post(reverse('api-shop:order-list'), {
+    #         'email': 'rs@test.local',
+    #         'shipping_address': {'first_name': 'mr', 'last_name': 'risha', 'address': '99 main st',
+    #                              'postal_code': '12345', 'city': 'NY', 'country': 'USA', 'address_type': 'SHIPPING'}
+    #     }, format='json')
+    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
