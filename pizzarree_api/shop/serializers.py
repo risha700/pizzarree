@@ -117,3 +117,23 @@ class OrderSerializer(serializers.ModelSerializer):
             address_obj = Address.objects.create(**address_data)
             setattr(instance, address_type, address_obj)
 
+
+class ReadOnlyTransactionSerializer(serializers.Serializer):
+    id = serializers.CharField()
+    type = serializers.CharField()
+    created_at = serializers.DateTimeField()
+    amount = serializers.DecimalField(max_digits=9, decimal_places=2)
+    tax_amount = serializers.DecimalField(max_digits=9, decimal_places=2)
+    status = serializers.CharField()
+    last_4 = serializers.SerializerMethodField(method_name='get_last_4')
+    card_type = serializers.SerializerMethodField(method_name='get_card_type')
+
+    def get_last_4(self, instance):
+        return instance.credit_card_details.last_4
+
+    def get_card_type(self, instance):
+        return instance.credit_card_details.card_type
+
+    class Meta:
+        read_only_fields = '__all__'
+

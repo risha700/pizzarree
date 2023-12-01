@@ -3,12 +3,17 @@ from importlib import import_module
 from django.conf import settings
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from rest_framework.test import APIClient, APIRequestFactory
+
 from rest_framework import status
 from rest_framework.reverse import reverse
-from rest_framework.test import APIClient
 
-from shop.models import Product, Coupon, Order
+from rest_framework.test import APITestCase
+from django.test import override_settings
+
+from shop.models import Product, Coupon, Order,PaymentLog
 from shop.models.cart import Cart
+from shop.payment_gateway import PaymentGateway
 from shop.utils import ProductFactory, CouponFactory
 
 User = get_user_model()
@@ -132,20 +137,155 @@ class OrderTestCase(TestCase):
         self.assertEqual(order.items.count(), 2)
 
 
-    # def test_admins_can_view_all_orders(self):
-    #     p = Product.objects.get(id=self.products[1].id)
-    #     p.stock = 10
-    #     p.save()
-    #     session.clear()
-    #     self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.products[0].id}))
-    #     self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.products[1].id}), {
-    #         'quantity': 3
-    #     })
-    #     self.client.post(reverse('api-shop:cart-apply-coupon'), {'coupon_code': self.coupons.last().code})
-    #
-    #     response = self.client.post(reverse('api-shop:order-list'), {
-    #         'email': 'rs@test.local',
-    #         'shipping_address': {'first_name': 'mr', 'last_name': 'risha', 'address': '99 main st',
-    #                              'postal_code': '12345', 'city': 'NY', 'country': 'USA', 'address_type': 'SHIPPING'}
-    #     }, format='json')
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+class CartTestCase(TestCase):
+    def setUp(self) -> None:
+        self.test_user = User.objects.create(username='test_user', email='testuser@test.com',
+                                             password='rrrr', phone='+16469061833', is_staff=False,
+                                             is_superuser=False, is_active=True)
+        self.client = APIClient(enforce_csrf_checks=False)
+        ProductFactory(3, False, tags=['computers', 'phones'])
+        self.product = Product.objects.last()
+        self.product_2 = Product.objects.first()
+        CouponFactory(1, active=False)
+        CouponFactory(2)
+        self.coupons = Coupon.objects.all()
+        self.product_2.stock = 3
+        self.product_2.save()
+        self.product.stock = 3
+        self.product.save()
+
+    def tearDown(self) -> None:
+        session.clear()
+    def test_add_product_to_cart(self):
+        # add product to cart
+        response = self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.product.id}))
+        self.assertEqual(response.json()['message'], '{} added to cart'.format(self.product.name))
+        self.assertEqual(get_cart(response).cart, self.client.session[settings.CART_SESSION_ID])
+        # add product-2
+        response_2 = self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.product_2.id}))
+        self.assertEqual(response_2.json()['message'], '{} added to cart'.format(self.product_2.name))
+        self.assertEqual(get_cart(response_2).cart, self.client.session[settings.CART_SESSION_ID])
+        self.assertEqual(len(get_cart(response_2).cart), 2)
+
+        # added more products
+        add_more_response = self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.product.id}),
+                                             {'quantity': 2})
+        self.assertEqual(get_cart(add_more_response).cart.get(str(self.product.id)).get('quantity'), 3)
+
+    def test_update_qty(self):
+        # update qty
+        update_qty_response = self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.product_2.id}),
+                                               {'quantity': 3, 'update': True})
+        self.assertEqual(int(get_cart(update_qty_response).cart.get(str(self.product_2.id)).get('quantity')), 3)
+
+    def test_cart_detail(self):
+        # cart detail
+        detail_response = self.client.get(reverse('api-shop:cart-details'))
+        self.assertEqual(detail_response.status_code, 200)
+        # print(get_cart(detail_response).get_total_price())
+
+    def test_cart_remove(self):
+        # remove product
+        remove_response = self.client.post(reverse('api-shop:cart-remove', kwargs={'product_id': self.product.id}))
+        self.assertEqual(remove_response.json()['message'], '{} removed from cart'.format(self.product.name))
+        self.assertEqual(get_cart(remove_response).cart, self.client.session[settings.CART_SESSION_ID])
+
+    def test_add_product_out_of_stock_fails(self):
+        out_of_stock_res = self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.product.id}),
+                                            {'quantity': 10})
+        self.assertEqual(out_of_stock_res.json()['detail'], 'product is out of stock')
+
+    def test_apply_valid_coupon(self):
+        response = self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.product.id}))
+        self.assertIsNone(get_cart(response).coupon_id)
+        coupon = self.coupons.last()
+        self.assertTrue(coupon.active)
+        coupon_apply_res = self.client.post(reverse('api-shop:cart-apply-coupon'), {
+            'coupon_code': coupon.code
+        })
+        self.assertEqual(coupon_apply_res.json()['message'], 'Coupon applied')
+        self.assertEqual(get_cart(coupon_apply_res).coupon_id, coupon.id)
+
+    def test_apply_invalid_coupon(self):
+        response = self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.product.id}))
+        self.assertIsNone(get_cart(response).coupon_id)
+        coupon = self.coupons.first()
+        coupon_apply_res = self.client.post(reverse('api-shop:cart-apply-coupon'), {
+            'coupon_code': coupon.code
+        })
+        self.assertEqual(coupon_apply_res.json()['message'], 'Coupon invalid')
+        self.assertIsNone(get_cart(response).coupon_id)
+
+payment_gw = PaymentGateway()
+from .views import PaymentViewSet
+
+class PaymentTestCase(APITestCase):
+    @override_settings(ROOT_URLCONF='app.tenant_urls')
+    def setUp(self) -> None:
+        self.test_user = User.objects.create(username='test_user', email='testuser@test.com',
+                                             password='rrrr', phone='+16469061833', is_staff=False,
+                                             is_superuser=False, is_active=True)
+        self.client = APIClient(enforce_csrf_checks=False)
+        self.request = APIRequestFactory()
+        ProductFactory(10, False, tags=['computers', 'phones'])
+        self.products = Product.objects.all()
+        self.successful_nonce = 'fake-valid-nonce'
+        self.failed_nonce = 'fake-processor-declined-visa-nonce'
+        self.visa_card = '4500600000000061'
+
+    def tearDown(self) -> None:
+        super(PaymentTestCase, self).tearDown()
+
+    def create_order(self):
+        p = Product.objects.get(id=self.products[1].id)
+        p.stock = 10
+        p.save()
+        self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.products[0].id}),format='json')
+        order_res = self.client.post(reverse('api-shop:order-list'),
+                                     data={
+                                         'email': 'rs@test.local',
+                                         'shipping_address': {'first_name': 'mr', 'last_name': 'risha',
+                                                              'address': '99 main st', 'postal_code': '12345',
+                                                              'city': 'NY', 'country': 'USA',
+                                                              'address_type': 'SHIPPING'},
+                                     },
+                                     format='json')
+        return order_res
+
+    def test_checkout_guest(self):
+        order_res = self.create_order()
+        self.assertEqual(order_res.status_code, status.HTTP_201_CREATED)
+        checkout_response = self.client.post(reverse('api-shop:payment-checkout', kwargs={'order_id': order_res.data.get('id')}),
+                                        data={'paymentMethodId': 'pm_card_visa'})
+        self.assertEqual(checkout_response.json().get('intent_status'), 'succeeded')
+        self.assertIsNotNone(checkout_response.json().get('client_secret'))
+        order = Order.objects.prefetch_related().get(id=order_res.data.get('id'))
+        self.assertEquals(order.status, "('COMPLETED', 'completed')")
+        self.assertTrue(order.paid)
+        self.assertEqual(get_cart(checkout_response).cart, {})
+
+        payment_log = PaymentLog.objects.last()
+        self.assertIsNotNone(payment_log.transaction_id)
+        self.assertEqual(payment_log.order.id, order_res.data.get('id'))
+        self.assertTrue(payment_log.order.paid)
+
+
+    def test_checkout_auth_user(self):
+        order_res = self.create_order()
+        self.assertEqual(order_res.status_code, status.HTTP_201_CREATED)
+        self.client.force_authenticate(self.test_user)
+
+        failed_checkout_response = self.client.post(reverse('api-shop:payment-checkout', kwargs={'order_id': order_res.data.get('id')}),
+                                             data={'paymentMethodId': 'pm_card_visa_chargeDeclined'})
+
+        self.assertEqual(failed_checkout_response.json().get('intent_status'), 'Your card was declined.')
+
+        checkout_response = self.client.post(reverse('api-shop:payment-checkout', kwargs={'order_id': order_res.data.get('id')}),
+                                             data={'paymentMethodId': 'pm_card_visa'})
+        self.assertEqual(checkout_response.json().get('intent_status'), 'succeeded')
+
+        payment_log = PaymentLog.objects.last()
+        self.assertIsNotNone(payment_log.transaction_id)
+        self.assertEqual(payment_log.order.id, order_res.data.get('id'))
+        self.assertTrue(payment_log.order.paid)
+        self.assertTrue(payment_log.user.id, self.test_user.id)

@@ -25,19 +25,23 @@ class Address(models.Model):
     phone = PhoneNumberField(null=True, blank=True)
 
 
+STATUS_OPTS = (
+    ('PENDING', _('pending')),
+    ('PROCESSING', _('processing')),
+    ('SHIPPED', _('shipped')),
+    ('DELIVERED', _('delivered')),
+    ('CANCELLED', _('cancelled')),
+    ('REFUNDED', _('refunded')),
+    ('COMPLETED', _('completed')),
+)
+
+
 class Order(models.Model):
     PAYMENT_OPS = (
         ('CASH', _('Cash')),
         ('ONLINE', _('Online')),
     )
-    STATUS_OPTS = (
-        ('PENDING', _('pending')),
-        ('PROCESSING', _('processing')),
-        ('SHIPPED', _('shipped')),
-        ('DELIVERED', _('delivered')),
-        ('CANCELLED', _('cancelled')),
-        ('REFUNDED', _('refunded')),
-    )
+
     identifier = models.UUIDField(default=uuid.uuid4, editable=False)
     email = models.EmailField()
     phone = PhoneNumberField(null=True, blank=True)

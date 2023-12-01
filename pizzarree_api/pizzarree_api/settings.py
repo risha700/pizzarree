@@ -167,7 +167,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 20
+    'PAGE_SIZE': 20,
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 CART_SESSION_ID = 'cart'
 

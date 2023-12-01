@@ -1,3 +1,4 @@
+import stripe.error
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
@@ -9,13 +10,13 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from shop.models import Product, Order, Coupon
 from shop.models.cart import Cart
+from shop.payment_gateway import PaymentGateway
 from shop.permissions import IsAuthorized, IsOrderOwner
 from shop.serializers import ProductSerializer, OrderSerializer
 from shop.utils import ProductFilterClass, OrderUUIDAuthedFilter
 from django.utils.translation import gettext_lazy as _
 
 
-# Create your views here.
 class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
@@ -113,3 +114,25 @@ class CartViewSet(ViewSet):
         except Coupon.DoesNotExist:
             request.session['coupon_id'] = None
             return Response({'message': _('Coupon invalid')}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+
+class PaymentViewSet(PaymentGateway, ViewSet):
+    permission_classes = [IsAdminUser]
+
+    # TODO: refactor to limit perm class hasActiveCart
+    @action(methods=['post'], detail=False,
+            url_path='checkout/(?P<order_id>[^/.]+)', permission_classes=[AllowAny])
+    def checkout(self, request, order_id=None):
+        order = Order.objects.get(id=order_id)
+        intent = {}
+        try:
+            # confirmed intent
+            intent = self.process_payment(request, order)
+        except stripe.error.StripeError as e:
+            intent = e.error.payment_intent
+            return Response(data={'intent_status': e.user_message, 'client_secret': intent.client_secret})
+
+        if intent.status == 'succeeded':
+            Cart(request).clear()
+
+        return Response(data={'intent_status': intent.status, 'client_secret': intent.client_secret})
