@@ -30,7 +30,7 @@ SUPPORT_MAIL = "support@pizzarree.net"
 
 AUTH_USER_MODEL = "accounts.User"
 DEFAULT_FROM_EMAIL = "info@pizzarree.test"
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # EMAIL_BACKEND = "django.core.mail.backendnds.console.EmailBackend"
 
@@ -47,21 +47,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
     'accounts',
     'shop',
     'taggit',
     'django_phonenumbers',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
 
-    
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -126,8 +125,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 CORS_ALLOW_ALL_ORIGINS = DEBUG
-# CORS_ALLOWED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', "https://elifehub.net").split(',')
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'common'
+)
+# CORS_ALLOWED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', "http://localhost:8080").split(',')
 # CORS_ALLOWED_ORIGIN_REGEXES = [fr"{os.environ.get('DJANGO_CORS_ALLOWED_ORIGIN_REGEXES', None)}"]
 # CSRF_TRUSTED_ORIGINS = os.environ.get('DJANGO_CORS_CSRF_TRUSTED_ORIGINS', "https://elifehub.net").split(',')
 
@@ -168,7 +180,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20,
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+    # 'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 CART_SESSION_ID = 'cart'
 

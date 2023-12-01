@@ -28,6 +28,7 @@ module.exports = configure(function (ctx) {
     boot: [
       'i18n',
       'axios',
+      'auth_guard'
     ],
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-css
@@ -47,12 +48,13 @@ module.exports = configure(function (ctx) {
 
       'roboto-font', // optional, you are not bound to it
       'material-icons', // optional, you are not bound to it
+      "material-icons-outlined",
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
-
+      vueRouterMode:
+          ctx.modeName === "spa" || ctx.modeName === "pwa" ? "history" : "hash",
       // transpile: false,
       // publicPath: '/',
 
@@ -66,7 +68,11 @@ module.exports = configure(function (ctx) {
       // showProgress: false,
       // gzip: true,
       // analyze: true,
+  env: {
+        VUE_APP_NAME: "Pizzarree Shop",
+        VUE_APP_API_BASE_URL: "http://localhost:8000/",
 
+      },
       // Options below are automatically set depending on the env, set them if you want to override
       // extractCSS: false,
 

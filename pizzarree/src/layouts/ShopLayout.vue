@@ -12,10 +12,10 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          Pizzarree Shop
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+<!--        <div>Quasar v{{ $q.version }}</div>-->
       </q-toolbar>
     </q-header>
 
@@ -28,7 +28,7 @@
         <q-item-label
           header
         >
-          Essential Links
+          Menu
         </q-item-label>
 
         <EssentialLink
@@ -53,31 +53,20 @@ const linksList = [
   {
     title: 'Shop',
     caption: 'quasar.dev',
-    icon: 'home',
+    icon: 'Home',
     link: 'Home'
   },
   {
     title: 'Checkout',
     caption: 'pay your order',
-    icon: 'payments',
+    icon: 'shopping_cart',
     link: 'Checkout'
-  },
-    {
-    title: 'Login',
-    caption: 'Access your account',
-    icon: 'user',
-    link: 'Login'
   },
 
 ]
 
 export default defineComponent({
-  name: 'MainLayout',
-
-  components: {
-    EssentialLink
-  },
-
+  name: 'ShopLayout',
   setup () {
     const leftDrawerOpen = ref(false)
 

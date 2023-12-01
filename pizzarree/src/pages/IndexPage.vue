@@ -3,15 +3,23 @@
     <img
       alt="Quasar logo"
       src="~assets/quasar-logo-vertical.svg"
-      class="tw-w-8 tw-h-8"
+      class="tw-w-24 tw-h-24"
     >
+
   </q-page>
+
+
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent,onMounted } from 'vue'
+import CheckoutPage from "pages/CheckoutPage.vue";
 
 export default defineComponent({
-  name: 'IndexPage'
+  name: 'IndexPage',
+
+
+
+
 })
 </script>

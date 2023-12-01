@@ -1,5 +1,12 @@
-import { store } from 'quasar/wrappers'
-import { createPinia } from 'pinia'
+import { store } from "quasar/wrappers";
+import { createPinia } from "pinia";
+import { createPersistedState } from "pinia-plugin-persistedstate";
+import SecureLS from "secure-ls";
+const ls = new SecureLS({
+  encodingType: "aes",
+  isCompression: false,
+  encryptionSecret: "sqhcngU9Ll++96qnbdAOuTrG60ncO24iSrewzm/xHqk=",
+});
 
 /*
  * If not building with SSR mode, you can
@@ -11,10 +18,16 @@ import { createPinia } from 'pinia'
  */
 
 export default store((/* { ssrContext } */) => {
-  const pinia = createPinia()
+  const pinia = createPinia();
 
-  // You can add Pinia plugins here
-  // pinia.use(SomePiniaPlugin)
-
-  return pinia
-})
+  pinia.use(
+    createPersistedState({
+      storage: {
+        getItem: (key) => ls.get(key),
+        setItem: (key, value) => ls.set(key, value),
+        removeItem: (key) => ls.remove(key),
+      },
+    })
+  );
+  return pinia;
+});
