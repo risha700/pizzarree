@@ -5,7 +5,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue'), name:'Home' },
-      { path: '/checkout', component: () => import('pages/CheckoutPage.vue'), name:'Checkout' },
+      { path: '/checkout', component: () => import('pages/shop/CheckoutPage.vue'), name:'Checkout' },
 
     ]
   },
@@ -13,7 +13,8 @@ const routes = [
     path: '/shop',
     component: () => import('layouts/ShopLayout.vue'),
     children: [
-      { path: 'checkout', component: () => import('pages/CheckoutPage.vue'), name:'Checkout' },
+      { path: 'menu', component: () => import('pages/shop/MenuPage.vue'), name:'Menu' },
+      { path: 'checkout', component: () => import('pages/shop/CheckoutPage.vue'), name:'Checkout' },
     ]
   },
   {

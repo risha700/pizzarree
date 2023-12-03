@@ -47,14 +47,20 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+import EssentialLink from 'components/partials/EssentialLink.vue'
 
 const linksList = [
   {
-    title: 'Shop',
-    caption: 'quasar.dev',
-    icon: 'home',
+    title: 'Home',
+    caption: '',
+    icon: 'Home',
     link: 'Home'
+  },
+    {
+    title: 'Menu',
+    caption: 'shop',
+    icon: 'store',
+    link: 'Menu'
   },
   {
     title: 'Checkout',

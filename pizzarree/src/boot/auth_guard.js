@@ -24,12 +24,12 @@ export default boot(async ({ router }) => {
           next();
         } else if (requiresAuth && !isAuthenticated) {
           next({
-            name: "login",
+            name: "Login",
             query: { redirect: to.fullPath },
           });
         } else if (requiresNotAuth && isAuthenticated) {
           next({
-            name: "dashboard",
+            name: "Dashboard",
           });
         } else {
           next();

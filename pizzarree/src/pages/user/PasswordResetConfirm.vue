@@ -71,7 +71,7 @@ import { useRoute, useRouter } from "vue-router";
 import { format } from "quasar";
 import { useI18n } from "vue-i18n";
 
-const reset_url = "api/v1/api-auth-user/password_change/";
+const reset_url = "api/v1/accounts/api-auth-user/password_change/";
 
 export default {
   name: "PasswordResetConfirm",
@@ -108,7 +108,7 @@ export default {
 
     confirmForm.onSuccess = async () => {
       confirmForm.reset(); // reset
-      await router.push(route.query.redirect || { name: "dashboard" });
+      await router.push(route.query.redirect || { name: "Dashboard" });
       await authStore.clearTempToken();
       Notify.create({
         type: "positive",

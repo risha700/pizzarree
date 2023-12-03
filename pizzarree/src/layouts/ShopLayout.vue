@@ -14,7 +14,7 @@
         <q-toolbar-title>
           Pizzarree Shop
         </q-toolbar-title>
-
+<!--Cart-->
 <!--        <div>Quasar v{{ $q.version }}</div>-->
       </q-toolbar>
     </q-header>
@@ -32,7 +32,7 @@
         </q-item-label>
 
         <EssentialLink
-          v-for="link in essentialLinks"
+          v-for="link in linksList"
           :key="link.title"
           v-bind="link"
         />
@@ -40,21 +40,30 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <SuspenseWithErrors>
+        <router-view />
+      </SuspenseWithErrors>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+import EssentialLink from 'components/partials/EssentialLink.vue'
+import SuspenseWithErrors from "components/partials/SuspenseWithErrors.vue";
 
 const linksList = [
   {
-    title: 'Shop',
-    caption: 'quasar.dev',
+    title: 'Home',
+    caption: '',
     icon: 'Home',
     link: 'Home'
+  },
+    {
+    title: 'Shop',
+    caption: 'shop',
+    icon: 'store',
+    link: 'Menu'
   },
   {
     title: 'Checkout',
@@ -67,11 +76,12 @@ const linksList = [
 
 export default defineComponent({
   name: 'ShopLayout',
+  components:{SuspenseWithErrors, EssentialLink},
   setup () {
     const leftDrawerOpen = ref(false)
 
     return {
-      essentialLinks: linksList,
+      linksList,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value

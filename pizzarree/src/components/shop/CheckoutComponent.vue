@@ -10,7 +10,6 @@
 <script>
 import {defineComponent, onMounted} from 'vue'
 import {loadStripe} from '@stripe/stripe-js';
-const stripe = await loadStripe('pk_test_RUZqAN8CkTK39VGr7FuIxPWE');
 
 export default defineComponent({
   name: "CheckoutComponent",
@@ -19,6 +18,7 @@ export default defineComponent({
         paymentElement.mount('#payment-methods')
         // linkAuthenticationElement.mount("#link-authentication-element");
     })
+    const stripe = await loadStripe('pk_test_RUZqAN8CkTK39VGr7FuIxPWE');
 
 
     var elements = await stripe.elements({

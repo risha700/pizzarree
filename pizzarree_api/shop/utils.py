@@ -1,6 +1,9 @@
 import django_filters
+import taggit
+from django.db.models import Q
 from django.utils import timezone
 from rest_framework import filters
+from taggit.forms import TagField
 
 from shop.models import Product, Coupon
 from faker import Faker
@@ -35,9 +38,27 @@ class CouponFactory:
                                   discount_type=coupon_type, active=active)
 
 
+class TagsFilter(filters.BaseFilterBackend):
+    """
+    Return all objects which match any of the provided tags
+    """
+    def filter_queryset(self, request, queryset, view):
+        tags = request.query_params.get('tags', None)
+        from django.db.models import Q
+        tag_filter = Q()
+        if tags:
+            tags = tags.split(',')
+            for tag in tags:
+                tag_filter |= Q(tags__name__icontains=tag)
+            queryset = queryset.filter(tag_filter).distinct()
+        return queryset
+
+
+
 class ProductFilterClass(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')
     slug = django_filters.CharFilter(lookup_expr='icontains')
+
 
 class OrderUUIDAuthedFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):

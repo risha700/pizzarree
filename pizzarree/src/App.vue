@@ -10,6 +10,7 @@ import { defineComponent } from 'vue'
 import {api} from "boot/axios";
 
 let API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
+
 export default defineComponent({
   name: 'App',
   setup(){

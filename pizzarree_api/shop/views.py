@@ -13,15 +13,17 @@ from shop.models.cart import Cart
 from shop.payment_gateway import PaymentGateway
 from shop.permissions import IsAuthorized, IsOrderOwner
 from shop.serializers import ProductSerializer, OrderSerializer
-from shop.utils import ProductFilterClass, OrderUUIDAuthedFilter
+from shop.utils import ProductFilterClass, OrderUUIDAuthedFilter, TagsFilter
 from django.utils.translation import gettext_lazy as _
 
 
 class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend]
-    filter_class = ProductFilterClass
+    filter_backends = (DjangoFilterBackend,TagsFilter)
+    # filterset_fields = ('slug', 'id')
 
+    filter_class = ProductFilterClass
+    # filterset_class = ProductFilterClass
     def get_queryset(self):
         qs = Product.objects.prefetch_related('tags')
         if self.request.user.is_authenticated and\

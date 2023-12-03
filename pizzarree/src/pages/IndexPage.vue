@@ -13,7 +13,7 @@
 
 <script>
 import { defineComponent,onMounted } from 'vue'
-import CheckoutPage from "pages/CheckoutPage.vue";
+import CheckoutPage from "pages/shop/CheckoutPage.vue";
 
 export default defineComponent({
   name: 'IndexPage',

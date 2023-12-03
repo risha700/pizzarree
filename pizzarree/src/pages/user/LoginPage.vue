@@ -141,7 +141,7 @@
                   flat
                   no-caps
                   dense
-                  :to="{ name: 'password_reset' }"
+                  :to="{ name: 'PasswordReset' }"
                   v-if="step == 2"
                 >
                   {{ capitalize($t("forgot")) + " " + $t("user.password") }} ?

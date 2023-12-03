@@ -29,7 +29,7 @@
         <div class="justify-between row full-width">
           <q-btn
             color="primary"
-            :to="{ name: 'login' }"
+            :to="{ name: 'Login' }"
             flat
             no-caps
             class="tw-capitalize"
@@ -60,7 +60,7 @@ import { useRoute, useRouter } from "vue-router";
 import { format } from "quasar";
 import { useI18n } from "vue-i18n";
 
-const reset_url = "api/v1/api-auth-user/password_reset/";
+const reset_url = "api/v1/accounts/api-auth-user/password_reset/";
 
 export default {
   name: "PasswordReset",
@@ -89,7 +89,7 @@ export default {
 
     passwordResetForm.onSuccess = async () => {
       passwordResetForm.reset(); // reset
-      await router.push(route.query.redirect || { name: "dashboard" });
+      await router.push(route.query.redirect || { name: "Dashboard" });
       Notify.create({
         type: "positive",
         message: `reset email has been set`,

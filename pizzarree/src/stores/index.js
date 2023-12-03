@@ -2,10 +2,12 @@ import { store } from "quasar/wrappers";
 import { createPinia } from "pinia";
 import { createPersistedState } from "pinia-plugin-persistedstate";
 import SecureLS from "secure-ls";
+let ENCRYPTION_KEY = process.env.VUE_ENCRYPTION_KEY;
+
 const ls = new SecureLS({
   encodingType: "aes",
   isCompression: false,
-  encryptionSecret: "sqhcngU9Ll++96qnbdAOuTrG60ncO24iSrewzm/xHqk=",
+  encryptionSecret: ENCRYPTION_KEY,
 });
 
 /*

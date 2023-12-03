@@ -10,7 +10,7 @@
 
 <script>
 import {defineComponent, onMounted} from "vue";
-import CheckoutComponent from "components/CheckoutComponent.vue";
+import CheckoutComponent from "components/shop/CheckoutComponent.vue";
 import SuspenseWithErrors from "components/partials/SuspenseWithErrors.vue";
 
 

@@ -89,7 +89,7 @@ export default {
   components: { FormErrors },
   name: "PasswordChange",
   async setup() {
-    const reset_url = "api/v1/api-auth-user/password_change/";
+    const reset_url = "api/v1/accounts/api-auth-user/password_change/";
     const loading = ref(false);
     const showPassword = ref(false);
     const { t } = useI18n();
@@ -112,7 +112,7 @@ export default {
     };
     resetForm.onSuccess = async () => {
       resetForm.reset(); // reset
-      await router.push({ name: "dashboard" });
+      await router.push({ name: "Dashboard" });
       Notify.create({
         type: "positive",
         message: t("password changed successfully"),

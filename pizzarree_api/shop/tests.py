@@ -66,6 +66,15 @@ class ProductTestCase(TestCase):
         self.assertFalse(Product.objects.first().published)
         self.assertTrue(Product.objects.last().published)
 
+    def test_api_filter_products_by_pk_and_slug(self):
+        ProductFactory(10, True, tags=['computers', 'phones', 'IOS', 'Android'], assign_names=['macbook pro'])
+        response = self.client.get(reverse('api-shop:product-list'),  {'tags': 'ios,android'})
+        # print(response.content)
+        self.assertIn('IOS', response.json().get('results')[0].get('tags'))
+        response = self.client.get(reverse('api-shop:product-list'),  {'name': 'macbook pro'})
+        self.assertIn('macbook pro', response.json().get('results')[0].get('name'))
+        response = self.client.get(reverse('api-shop:product-list'),  {'slug': 'macbook-pro'})
+        self.assertIn('macbook-pro', response.json().get('results')[0].get('slug'))
 
 get_cart = lambda res: Cart(res.wsgi_request)
 engine = import_module(settings.SESSION_ENGINE)
