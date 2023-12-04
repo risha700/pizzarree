@@ -41,16 +41,16 @@ class PaymentGateway:
             confirm=True,
             return_url='https' if request.is_secure() else 'http' + '://' + get_current_site(request).domain,
             amount=int(order.total_cost*100),
-            currency="nzd",
+            currency="usd",
             automatic_payment_methods={"enabled": True, 'allow_redirects': 'always'},
-            payment_method=request.data.get('paymentMethodId'),
+            payment_method=str(request.data.get('paymentMethodId')),
             use_stripe_sdk=True,
             customer=customer_id,
             # setup_future_usage="off_session",
             statement_descriptor="My Order",
             metadata={
-                'order_id': order.id,
-                'order_email': order.email
+                'order_id': str(order.id),
+                'order_email': str(order.email)
             },
         )
         payment_log = PaymentLog.objects.create(user_id=request.user.id, order=order, amount=intent.amount,

@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh Lpr fFf">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -23,21 +23,26 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
+      :mini="true"
+      :breakpoint="10"
     >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Menu
-        </q-item-label>
 
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
+      <q-list padding >
+          <q-item clickable v-for="link in linksList" :key="link.title" :to="{ name: link.link }" exact  v-ripple>
+            <q-item-section v-if="link.icon" avatar >
+              <div class="tw-flex tw-flex-col tw-items-center">
+                  <q-icon :name="link.icon" size="2rem" />
+                  <span class="tw-text-xs">{{link.title}}</span>
+              </div>
+            </q-item-section>
+          </q-item>
       </q-list>
     </q-drawer>
+     <q-footer elevated>
+        <q-toolbar>
+          <q-toolbar-title>Footer</q-toolbar-title>
+        </q-toolbar>
+      </q-footer>
 
     <q-page-container>
       <SuspenseWithErrors>
@@ -56,7 +61,7 @@ const linksList = [
   {
     title: 'Home',
     caption: '',
-    icon: 'Home',
+    icon: 'home',
     link: 'Home'
   },
     {
@@ -66,17 +71,17 @@ const linksList = [
     link: 'Menu'
   },
   {
-    title: 'Checkout',
-    caption: 'pay your order',
+    title: 'Cart',
+    caption: 'cart',
     icon: 'shopping_cart',
-    link: 'Checkout'
+    link: 'Cart'
   },
 
 ]
 
 export default defineComponent({
   name: 'ShopLayout',
-  components:{SuspenseWithErrors, EssentialLink},
+  components:{SuspenseWithErrors, },
   setup () {
     const leftDrawerOpen = ref(false)
 

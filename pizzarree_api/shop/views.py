@@ -3,9 +3,11 @@ from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound, NotAcceptable
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAdminUser, OR
 from rest_framework.response import Response
+from rest_framework.utils import json
 from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from shop.models import Product, Order, Coupon
@@ -78,14 +80,52 @@ class OrderViewSet(ModelViewSet):
 class CartViewSet(ViewSet):
     permission_classes = [AllowAny]  # guarded by session separation
 
-    @action(methods=['post'], detail=False, url_path='add/(?P<product_id>[^/.]+)')
+    @action(methods=['post'], detail=False, url_path='add(?:/(?P<product_id>[^/.]+))?')
     def add(self, request, product_id=None):
         cart = Cart(request)
-        product = get_object_or_404(Product, id=product_id)
-        quantity = request.data.get('quantity') or int(1)
-        update = request.data.get('update') or False
-        cart.add(product=product, quantity=quantity, update_quantity=update)
-        return Response({'message': _('{} added to cart').format(product.name)}, status=status.HTTP_202_ACCEPTED)
+        products = []
+
+        if product_id is not None:
+            product = get_object_or_404(Product, id=product_id)
+            cart.add(product=product,
+                     quantity=request.data.get('quantity', 1),
+                     update_quantity=request.data.get('update', False))
+
+            return Response({'message': _('{} added to cart').format(product.name)}, status=status.HTTP_202_ACCEPTED)
+
+        if request.data.get('product_list', False):
+            products = request.data.get('product_list', {})
+            # products = request.data
+            if len(request.data) == 0:
+                raise NotAcceptable()
+            products_db = Product.objects.all()
+            if request.content_type != 'application/json':
+                req_data = dict(request.data.lists()) if isinstance(products, str) else products
+                products = []
+                for x in req_data['product_list']:
+                    products.append(json.loads(str(x).replace("'", "\"")))
+
+            for prod in products:
+                if isinstance(prod, dict):
+                    pid = prod.get('id')
+                    qty = prod.get('quantity', 1)
+                    update = prod.get('update', False)
+                elif isinstance(prod, list):
+                    if not isinstance(prod[0], str) or isinstance(prod[0], int):
+                        raise NotAcceptable()
+                    pid = prod[0]
+                    qty = prod[1] if len(prod) > 1 else 1
+                    update = prod[2] if len(prod) > 2 else False
+
+                else:
+                    raise NotAcceptable()
+                p = products_db.filter(id=pid)
+                if not p.exists():
+                    raise NotFound()
+                product = p.get()
+                cart.add(product=product,quantity=qty, update_quantity=update)
+            return Response({'message': _('Cart Updated')},status=status.HTTP_202_ACCEPTED)
+        raise NotAcceptable()
 
     @action(methods=['post'], detail=False, url_path='remove/(?P<product_id>[^/.]+)')
     def remove(self, request, product_id=None):
@@ -131,10 +171,12 @@ class PaymentViewSet(PaymentGateway, ViewSet):
             # confirmed intent
             intent = self.process_payment(request, order)
         except stripe.error.StripeError as e:
+
             intent = e.error.payment_intent
-            return Response(data={'intent_status': e.user_message, 'client_secret': intent.client_secret})
+            return Response(data={'intent_status': e.user_message, 'client_secret': intent})
+            # return Response(data={'intent_status': e.user_message, 'client_secret': intent.client_secret})
 
         if intent.status == 'succeeded':
             Cart(request).clear()
-
+            #TODO: send email to user to
         return Response(data={'intent_status': intent.status, 'client_secret': intent.client_secret})

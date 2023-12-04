@@ -70,6 +70,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'pizzarree_api.urls'
+STATIC_URL = '/static/' #alias for static_root
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static_src")
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
 
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
@@ -138,12 +145,15 @@ CORS_ALLOW_HEADERS = (
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
-    'common'
+    'common',
+    'access-control-allow-origin',
+    'access-control-allow-credentials',
+
 )
 # CORS_ALLOWED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', "http://localhost:8080").split(',')
 # CORS_ALLOWED_ORIGIN_REGEXES = [fr"{os.environ.get('DJANGO_CORS_ALLOWED_ORIGIN_REGEXES', None)}"]
-# CSRF_TRUSTED_ORIGINS = os.environ.get('DJANGO_CORS_CSRF_TRUSTED_ORIGINS', "https://elifehub.net").split(',')
-
+CSRF_TRUSTED_ORIGINS =os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', "http://localhost:8080").split(',')
+CORS_ALLOW_CREDENTIALS = True
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 

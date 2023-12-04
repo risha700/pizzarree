@@ -181,6 +181,53 @@ class CartTestCase(TestCase):
                                              {'quantity': 2})
         self.assertEqual(get_cart(add_more_response).cart.get(str(self.product.id)).get('quantity'), 3)
 
+    def test_add_many_products_to_cart(self):
+        self.product.stock = 10
+        self.product_2.stock = 10
+        self.product.save()
+        self.product_2.save()
+        # add products to cart
+        response = self.client.post(reverse('api-shop:cart-add'),data={
+                "product_list": [
+                        [self.product.id, 2, "True"], [self.product_2.id, 1]
+                ]
+        }, format='json')
+        # print(response.content)
+        self.assertEqual(response.json()['message'], 'Cart Updated')
+        self.assertEqual(get_cart(response).cart, self.client.session[settings.CART_SESSION_ID])
+        self.assertEqual(len(get_cart(response).cart), 2)
+
+        bad_response = self.client.post(reverse('api-shop:cart-add'),data={
+                "product_list": [
+                        [277, 200, "True"], [self.product_2.id, 1]
+                ]
+        }, format='json')
+        self.assertEqual(bad_response.json().get('detail'), 'Not found.' )
+
+
+        # test without json
+        response = self.client.post(reverse('api-shop:cart-add'),data={
+                "product_list": [
+                        [self.product.id, 2, "True"], [self.product_2.id, 1]
+                ]
+        })
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+     # test with complex object
+        response = self.client.post(reverse('api-shop:cart-add'),data={
+                "product_list": [
+                    {
+                        "id":self.product.id,
+                        "quantity":2,
+                        "update":"False"
+                    },
+                    {
+                        "id": self.product_2.id,
+                        "quantity": 1,
+                    },
+
+                ]
+        })
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
     def test_update_qty(self):
         # update qty
         update_qty_response = self.client.post(reverse('api-shop:cart-add', kwargs={'product_id': self.product_2.id}),

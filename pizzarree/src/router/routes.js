@@ -15,6 +15,7 @@ const routes = [
     children: [
       { path: 'menu', component: () => import('pages/shop/MenuPage.vue'), name:'Menu' },
       { path: 'checkout', component: () => import('pages/shop/CheckoutPage.vue'), name:'Checkout' },
+      { path: 'cart', component: () => import('pages/shop/CartPage.vue'), name:'Cart' },
     ]
   },
   {

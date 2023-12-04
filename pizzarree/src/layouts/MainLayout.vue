@@ -53,25 +53,19 @@ const linksList = [
   {
     title: 'Home',
     caption: '',
-    icon: 'Home',
+    icon: 'home',
     link: 'Home'
   },
     {
-    title: 'Menu',
-    caption: 'shop',
+    title: 'Shop',
+    caption: 'Pizza Shop',
     icon: 'store',
     link: 'Menu'
   },
-  {
-    title: 'Checkout',
-    caption: 'pay your order',
-    icon: 'payments',
-    link: 'Checkout'
-  },
     {
     title: 'Login',
-    caption: 'Access your account',
-    icon: 'user',
+    caption: 'Your Account',
+    icon: 'person',
     link: 'Login'
   },
 

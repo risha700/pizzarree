@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          Pizzarree Shop - User Dashboard
+          Pizzarree Shop - User Area
         </q-toolbar-title>
 
       </q-toolbar>
@@ -49,18 +49,19 @@ import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/partials/EssentialLink.vue'
 
 const linksList = [
-  {
-    title: 'Shop',
-    caption: 'quasar.dev',
-    icon: 'Home',
+    {
+    title: 'Home',
+    caption: '',
+    icon: 'home',
     link: 'Home'
   },
   {
-    title: 'Checkout',
-    caption: 'pay your order',
-    icon: 'shopping_cart',
-    link: 'Checkout'
+    title: 'Shop',
+    caption: 'Start Ordering',
+    icon: 'store',
+    link: 'Menu'
   },
+
 
 ]
 
