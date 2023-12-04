@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          Pizzarree Shop
         </q-toolbar-title>
 
         <div>Quasar v{{ $q.version }}</div>
