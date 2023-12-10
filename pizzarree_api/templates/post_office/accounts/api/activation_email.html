@@ -10,7 +10,7 @@
         <p style="font-weight:bolder;">{% translate "Hi" %} <strong style="color:#447e9b;">{{ user.username }},</strong></p>
         <p>{% translate "Please click on the link below to confirm your registration" %}</p>
 
-        <a style="padding: 0.7rem 1rem;text-decoration: none;color: #FFF;background:#ff8a00; border-radius: 3rem;margin-top: 1rem; display: inline-block;"
+        <a style="padding: 0.7rem 1rem;text-decoration: none;color: #FFF;background:#a41313; border-radius: 3rem;margin-top: 1rem; display: inline-block;"
            href="{{ protocol }}://{{ domain }}{% url "api-auth:activate" uidb64=uid token=token %}{% if referer != None %}?referer={{ referer }} {% endif %}"><strong>{% translate "Activate" %}</strong></a>
     </div>
 

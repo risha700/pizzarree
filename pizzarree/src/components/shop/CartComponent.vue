@@ -1,8 +1,8 @@
 <template>
 
-    <div class="flex  justify-between  self-start items-start row tw-static q-layout-padding col">
+    <div class="flex  justify-between self-start items-start row tw-static q-layout-padding col">
 
-      <q-card class=" col-sm-12 col-md-9">
+      <q-card class=" col-sm-12 col-md-8">
         <q-card-section v-if="!isCartEmpty">
           <div v-for="(items, id) in cart" :key="id">
 
@@ -33,10 +33,10 @@
         </q-card-section>
       </q-card>
 
-      <q-card class="flex-container self-start tw-sticky  tw-top-20">
-        <q-card-section>
+      <q-card class="flex-container  self-start tw-sticky tw-top-20 col-xs-12 col-md-3 q-mt-xs">
+        <q-card-section class="column justify-around   tw-min-h-[300px]">
           <q-toolbar-title>You Total ${{cartTotal}}</q-toolbar-title>
-          <q-btn @click.prevent="handleCheckout" dense color="primary"  style="width: 150px">Checkout</q-btn>
+          <q-btn @click.prevent="handleCheckout" dense color="primary"  :disable="cartTotal<=0">Checkout</q-btn>
         </q-card-section>
       </q-card>
     </div>
@@ -48,7 +48,7 @@ import {computed, defineComponent, onMounted, ref, watch} from 'vue'
 import {useShopStore} from "stores/shop";
 import {storeToRefs} from "pinia";
 import {useRouter} from "vue-router";
-const cart_url = "api/v1/shop/cart/add/";
+
 
 export default defineComponent({
   name: "CartComponent",
@@ -63,19 +63,28 @@ export default defineComponent({
 
     const removeFromCart=(prod_id)=>{
       delete cart.value[prod_id];
-      if(!isCartEmpty.value)
-      calculateCartDues()
+      if(!isCartEmpty.value){
+        calculateCartDues()
+      }else{
+        cartTotal.value = 0;
+      }
     }
     const handleCheckout = async ()=>{
-      window.cart = cart.value
+      // window.cart = cart.value
       let data = Object.values(cart.value)?.flatMap(x=>x).flat().flatMap(x=>[{"id":x.id}])
 
       // await store.postToApiCart({"product_list":data}, cart_url)
-      await store.postToApiCart({"product_list":data}, cart_url)
+      await store.postToApiCart({"product_list":data})
     }
-    onMounted(()=>{if(!isCartEmpty.value)calculateCartDues();})
+    onMounted(()=>{
+      // window.cart = cart.value
+      if(!isCartEmpty.value){
+        calculateCartDues()
+      }
+    })
     const calculateCartDues = ()=>{
-      cartTotal.value = Object.values(cart.value)?.flatMap(x=>x).flat().map(x=>x.price).reduce((a,b)=>Number(a)+Number(b)).toFixed(2)
+      let total = Number(Object.values(cart.value)?.flatMap(x=>x).flat().map(x=>x.price)?.reduce((a,b)=>Number(a)+Number(b)))?.toFixed(2)
+      cartTotal.value = total || 0;
     };
 
 

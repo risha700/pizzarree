@@ -1,6 +1,6 @@
 
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex justify-center">
     <SuspenseWithErrors>
       <CheckoutComponent></CheckoutComponent>
     </SuspenseWithErrors>

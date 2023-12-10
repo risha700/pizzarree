@@ -1,5 +1,5 @@
 <template>
-  <div  v-if="products" class="flex tw-gap-10 tw-p-10" >
+  <div  v-if="products && products.length" class="flex tw-gap-10 tw-p-10" >
     <h6>{{header_title}}</h6>
     <div v-for="product in products" :key="product.id" >
       <ProductCard :product="product" @show-modal="showProductDetails" ></ProductCard>

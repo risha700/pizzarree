@@ -1,22 +1,32 @@
-version: '3'
+version: '3.9'
 
 services:
   backend:
+    container_name: backend
     build:
-      context: ./pizzarree_backend
+      context: ./pizzarree_api
+#      dockerfile: ./pizzarree_api/Dockerfile
+#      image: risha700/pizzarree_api:latest
     ports:
       - "8000:8000"
     volumes:
-      - ./pizzarree_backend:/app
-    command: python manage.py runserver 0.0.0.0:8000
+      - ./pizzarree_api:/code/app # dev
+      - ./docker_data/media/:/code/app/media/
+      - ./docker_data/db.sqlite3:/code/app/db.sqlite3
+#    command: python manage.py runserver 0.0.0.0:8000
+    command: "uwsgi --https 0.0.0.0:8000,cert/server.crt,cert/server.key \
+    --wsgi-file pizzarree_api/wsgi.py --master --processes 4 --threads 2 \
+    --static-map /static=/code/app/static --static-map /media=/code/app/media --python-auto-reload=1"
 
   frontend:
+    container_name: frontend
     build:
-      context: ./pizzarree_frontend
+      context: ./pizzarree
+#      dockerfile: ./pizzarree/Dockerfile
     ports:
       - "8080:8080"
     volumes:
-      - ./pizzarree_frontend:/app
-    command: npm run serve
+      - ./pizzarree:/app
+    command: quasar dev
     depends_on:
       - backend

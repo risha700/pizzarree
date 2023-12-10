@@ -10,6 +10,7 @@
 
 
 const ESLintPlugin = require('eslint-webpack-plugin')
+const fs = require("fs");
 
 
 const { configure } = require('quasar/wrappers');
@@ -71,7 +72,7 @@ module.exports = configure(function (ctx) {
   env: {
         //TODO:load it from env
         VUE_APP_NAME: "Pizzarree Shop",
-        VUE_APP_API_BASE_URL: "http://localhost:8000/",
+        VUE_APP_API_BASE_URL: "https://localhost:8000/",
         VUE_ENCRYPTION_KEY:"K/mTy6EXQjLJsJAVW0IlO+ns7wpZBea+PDI2/V7421Y=",
 
       },
@@ -94,7 +95,11 @@ module.exports = configure(function (ctx) {
         type: 'http'
       },
       port: 8080,
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
+        https: {
+        key: fs.readFileSync("./cert/server.key"),
+        cert: fs.readFileSync("./cert/server.crt"),
+      },
     },
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-framework

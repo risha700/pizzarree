@@ -68,7 +68,7 @@ class ProductTestCase(TestCase):
 
     def test_api_filter_products_by_pk_and_slug(self):
         ProductFactory(10, True, tags=['computers', 'phones', 'IOS', 'Android'], assign_names=['macbook pro'])
-        response = self.client.get(reverse('api-shop:product-list'),  {'tags': 'ios,android'})
+        response = self.client.get(reverse('api-shop:product-list'),  {'tags': 'Ios'})
         # print(response.content)
         self.assertIn('IOS', response.json().get('results')[0].get('tags'))
         response = self.client.get(reverse('api-shop:product-list'),  {'name': 'macbook pro'})
@@ -334,7 +334,7 @@ class PaymentTestCase(APITestCase):
         failed_checkout_response = self.client.post(reverse('api-shop:payment-checkout', kwargs={'order_id': order_res.data.get('id')}),
                                              data={'paymentMethodId': 'pm_card_visa_chargeDeclined'})
 
-        self.assertEqual(failed_checkout_response.json().get('intent_status'), 'Your card was declined.')
+        self.assertEqual(failed_checkout_response.json().get('error'), 'Your card was declined.')
 
         checkout_response = self.client.post(reverse('api-shop:payment-checkout', kwargs={'order_id': order_res.data.get('id')}),
                                              data={'paymentMethodId': 'pm_card_visa'})

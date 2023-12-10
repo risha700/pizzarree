@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
 import {Notify} from "quasar";
+import {useAuthStore} from "stores/auth";
 
 
 export const useShopStore = defineStore("shop", {
+
   state: () => ({
     products:{
       pizzas:{},
@@ -16,18 +18,27 @@ export const useShopStore = defineStore("shop", {
     },
     cart: {},
     checkout:{},
-    order:{}
+    order:{},
+    customer_email:null
 
   }),
   persist: {
     beforeRestore: (ctx) => {
       // console.log(`about to restore '${ctx.store.$id}'`);
     },
+
     key:'shop'
   },
   getters: {
     getCart: (state) => {
       return state.cart
+    },
+    hasCurrentPendingOrder:(state)=>{
+      return Object.keys(state.order).length > 0 ;
+    },
+    AuthUser: (state)=>{
+      const user = useAuthStore();
+      return user
     },
   },
   actions: {
@@ -36,14 +47,42 @@ export const useShopStore = defineStore("shop", {
       this.order = {};
       await this.router.push({name:"Done", query:{message: 'Order Successful', level:'success'}})
     },
-    async postToApiCart(data, url) {
+    async serverCartSanityCheck(){
+      let active_session_cart_items= await api.get('api/v1/shop/cart/details/');
+      let comparer = JSON.parse(JSON.stringify(Object.values(this.cart))).flatMap(x=>x).flat();
+      let temp = active_session_cart_items.data['cart'];
+      let transformedCartItems = [];
+      temp.forEach((item)=>{
+        for (let i = 0; i < Number(item.quantity); i++) {
+          transformedCartItems.push(item.product.id)
+        }
+      })
+      const sameObj = ()=>  JSON.stringify(transformedCartItems.sort()) === JSON.stringify(comparer.flatMap(x=>x.id).sort());
+      const cartIsDirty = ()=>Object.keys(active_session_cart_items.data).length !== 0;
+      if (cartIsDirty() && !sameObj()){
+          await api.post('api/v1/shop/cart/clear/');
+      }
+      return sameObj();
+    },
+    async postToApiCart(data, url="api/v1/shop/cart/add/") {
       api.defaults.withCredentials = true
+      //todo: sanity check for adjusted active session orders
+      let sameCart = await this.serverCartSanityCheck();
+
+      if(sameCart){
+        // assumes we have order in storage
+          await this.router.push({name:"Checkout"})
+          return;
+      }
 
       await api
-        .post(url, data)
+        .post(url, data) // add to cart
         .then(async (response) => {
-          // sanity check to retrieve the server cart and compare it
-          await this.createOrder('api/v1/shop/orders/')
+          if(this.hasCurrentPendingOrder){
+            await this.updateOrder(`api/v1/shop/orders/${this.order.id}/`)
+          }else{
+            await this.createOrder('api/v1/shop/orders/')
+          }
         })
       .catch(e=> Notify.create({type: 'negative', message: e.response?.data?.detail, closeBtn:true}))
     },
@@ -56,14 +95,24 @@ export const useShopStore = defineStore("shop", {
     async createOrder(url) {
       api.defaults.withCredentials = true
       await api
-        .post(url, {"email":"ahbox@outlook.com"})
+        .post(url, {"email":this.customer_email})
         .then(async ({data}) => {
-
           Object.assign(this.order, data);
           await this.router.push({name:"Checkout"})
         })
         .catch(e=> Notify.create({type: 'negative', message: e.message, closeBtn:true}))
     },
+    async updateOrder(url) {
+        api.defaults.withCredentials = true
+        await api
+          .put(url, {"email":this.customer_email})
+          .then(async ({data}) => {
+            console.log('after uodate', data)
+            Object.assign(this.order, data);
+            await this.router.push({name:"Checkout"})
+          })
+          .catch(e=> Notify.create({type: 'negative', message: e.message, closeBtn:true}))
+      },
     async addToLocalCart(id, products){
       this.cart[id] = [products]
     },
@@ -77,6 +126,17 @@ export const useShopStore = defineStore("shop", {
      this.products.sides = all_products.filter((m)=>m.tags.includes('side'))
      this.products.sizes = all_products.filter((m)=>m.tags.includes('size'))
      this.products.crusts = all_products.filter((m)=>m.tags.includes('crust'))
-   }
+   },
+   async setupCustomerOrderEmail(){
+      if(this.AuthUser.isAuthenticated){
+        this.customer_email = this.AuthUser.email;
+      }
+      else if(this.customer_email == null){
+          // Todo: make it more unique
+        // this.customer_email = Date.now()+'_guest@'+window.location.host;
+        this.customer_email = Date.now()+'_guest@test.net';
+      }
+   },
+
   },
 });

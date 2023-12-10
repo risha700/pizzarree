@@ -3,25 +3,22 @@ from rest_framework.request import Request
 
 
 class IsAuthorized(BasePermission):
-    def has_permission(self, *args):
-        # is_active and verified and premium
-        if isinstance(args[0], Request):
-            request = args[0]
-        else:
-            request = args[0].request
+    def has_permission(self, request, view):
         return request.user and request.user.is_authenticated and \
             (request.user.is_staff or request.user.is_superuser or request.user.get_all_permissions())
 
-    def has_object_permission(self, view, obj, **kwargs):
+    def has_object_permission(self, request, view, obj):
         return view.request.user == view.request.user.is_staff or view.request.user.is_superuser
 
 
 class IsOrderOwner(BasePermission):
-    def has_permission(self, view, **kwargs):
+    def has_permission(self, request, view):
+
+
         qs = view.queryset
-        order_email = view.request.query_params.get('order_email', False)
-        request_user_email = getattr(view.request.user, 'email', False)
-        if view.request.user.is_anonymous and not order_email:
+        order_email = view.request.data.get('email', False)
+        request_user_email = getattr(request.user, 'email', False)
+        if request.user.is_anonymous and not order_email:
             return False
         if order_email:
             view.queryset = qs.filter(email=order_email)
@@ -29,7 +26,8 @@ class IsOrderOwner(BasePermission):
             view.queryset = qs.filter(email=request_user_email)
         return True
 
-    def has_object_permission(self, view, obj, **kwargs):
-        order_email = view.request.query_params.get('order_email', None)
-        request_user_email = getattr(view.request.user, 'email', False)
+    def has_object_permission(self, request, view, obj):
+
+        order_email = view.request.data.get('email', None)
+        request_user_email = getattr(request.user, 'email', False)
         return request_user_email == obj.email or order_email == obj.email

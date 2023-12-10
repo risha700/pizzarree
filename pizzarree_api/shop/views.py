@@ -15,7 +15,7 @@ from shop.models.cart import Cart
 from shop.payment_gateway import PaymentGateway
 from shop.permissions import IsAuthorized, IsOrderOwner
 from shop.serializers import ProductSerializer, OrderSerializer
-from shop.utils import ProductFilterClass, OrderUUIDAuthedFilter, TagsFilter
+from shop.utils import ProductFilterClass, OrderUUIDAuthedFilter, TagsFilter, is_jsonable
 from django.utils.translation import gettext_lazy as _
 
 
@@ -51,8 +51,8 @@ class OrderViewSet(ModelViewSet):
 
     def get_permissions(self):
         permissions = super(OrderViewSet, self).get_permissions()
-        if self.action in ['list', 'retrieve', 'destroy', 'update']:
-            permissions = [OR(IsAuthorized, IsOrderOwner)]
+        if self.action in ['list', 'retrieve', 'destroy', 'update', 'partial_update']:
+            permissions = [OR(IsOrderOwner(), IsAuthorized())]
         if self.action in ['create']:
             permissions = [AllowAny()]
         return permissions
@@ -110,19 +110,18 @@ class CartViewSet(ViewSet):
                     pid = prod.get('id')
                     qty = prod.get('quantity', 1)
                     update = prod.get('update', False)
-                elif isinstance(prod, list):
-                    if not isinstance(prod[0], str) or isinstance(prod[0], int):
-                        raise NotAcceptable()
+                elif is_jsonable(prod):
                     pid = prod[0]
                     qty = prod[1] if len(prod) > 1 else 1
                     update = prod[2] if len(prod) > 2 else False
-
                 else:
-                    raise NotAcceptable()
+                    raise NotAcceptable(detail='Object format unsupported {}'.format(type(prod)))
+
                 p = products_db.filter(id=pid)
                 if not p.exists():
                     raise NotFound()
                 product = p.get()
+
                 cart.add(product=product,quantity=qty, update_quantity=update)
             return Response({'message': _('Cart Updated')},status=status.HTTP_202_ACCEPTED)
         raise NotAcceptable()
@@ -160,6 +159,10 @@ class CartViewSet(ViewSet):
 
 class PaymentViewSet(PaymentGateway, ViewSet):
     permission_classes = [IsAdminUser]
+    allow_stripe_headers = {
+        'X-Frame-Options': 'ALLOW-FROM https://*.stripe.com'
+
+    }
 
     # TODO: refactor to limit perm class hasActiveCart
     @action(methods=['post'], detail=False,
@@ -171,12 +174,19 @@ class PaymentViewSet(PaymentGateway, ViewSet):
             # confirmed intent
             intent = self.process_payment(request, order)
         except stripe.error.StripeError as e:
-
-            intent = e.error.payment_intent
-            return Response(data={'intent_status': e.user_message, 'client_secret': intent})
-            # return Response(data={'intent_status': e.user_message, 'client_secret': intent.client_secret})
+            if hasattr(e.error, 'payment_intent'):
+                intent = e.error.payment_intent
+            clt_secret = intent.client_secret if intent and intent.client_secret else None
+            # raise NotAcceptable(detail=e.user_message, code=e.code)
+            return Response(data={'error': e.user_message, 'client_secret': clt_secret},
+                            headers=self.allow_stripe_headers)
 
         if intent.status == 'succeeded':
             Cart(request).clear()
+            # if coupon used invalidate it
+
+            # headers = {'X-Frame-Options': 'ALLOW-FROM https://*.stripe.com'}
             #TODO: send email to user to
-        return Response(data={'intent_status': intent.status, 'client_secret': intent.client_secret})
+        return Response(
+            data={'intent_status': intent.status, 'client_secret': intent.client_secret},
+            headers=self.allow_stripe_headers)

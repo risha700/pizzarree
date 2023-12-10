@@ -1,3 +1,5 @@
+import json
+
 import django_filters
 import taggit
 from django.db.models import Q
@@ -70,3 +72,11 @@ class OrderUUIDAuthedFilter(filters.BaseFilterBackend):
             else:
                 queryset = queryset.filter(identifier=identifier, email=request.user.email).distinct()
         return queryset
+
+
+def is_jsonable(x):
+    try:
+        json.dumps(x)
+        return True
+    except (TypeError, OverflowError):
+        return False

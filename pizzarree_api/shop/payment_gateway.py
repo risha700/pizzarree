@@ -36,10 +36,10 @@ class PaymentGateway:
                 user_vault.save()
 
             customer_id = user_vault.vault_id
-
         intent = self.gateway.PaymentIntent.create(
             confirm=True,
-            return_url='https' if request.is_secure() else 'http' + '://' + get_current_site(request).domain,
+            return_url="{}://{}".format( 'https' if request.is_secure() else 'http' ,get_current_site(request).domain),
+            # return_url='https' if request.is_secure() else 'http' + '://' + get_current_site(request).domain,
             amount=int(order.total_cost*100),
             currency="usd",
             automatic_payment_methods={"enabled": True, 'allow_redirects': 'always'},
@@ -52,6 +52,8 @@ class PaymentGateway:
                 'order_id': str(order.id),
                 'order_email': str(order.email)
             },
+            # after domain verfication
+            # stripe_account='{{CONNECTED_ACCOUNT_ID}}',
         )
         payment_log = PaymentLog.objects.create(user_id=request.user.id, order=order, amount=intent.amount,
                                                 transaction_id=intent.id, info={'type': intent.payment_method})

@@ -17,7 +17,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 PROJECT_NAME = os.getenv('DJANGO_PROJECT_NAME', 'Pizzarree Shop')
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 TESTING = sys.argv[1:2] == ['test']
 FRONTEND_URL = os.getenv('DJANGO_FRONTEND_URL', 'https://pizzarree.net')
 API_WEBHOOK_REDIRECT_EXTENSION = os.getenv('DJANGO_API_WEBHOOK_REDIRECT_EXTENSION', 'done')
@@ -26,19 +26,33 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', secrets.token_urlsafe(38))
 DEBUG = bool(literal_eval(os.getenv('DJANGO_DEBUG', '1')))
 ADMIN_SITE_PATH = os.getenv('DJANGO_ADMIN_SITE_PATH', 'admin')
 SUPPORT_MAIL = "support@pizzarree.net"
-
-
 AUTH_USER_MODEL = "accounts.User"
-DEFAULT_FROM_EMAIL = "info@pizzarree.test"
-ALLOWED_HOSTS = ["*"]
+
+DEFAULT_FROM_EMAIL = "postmaster@pizzarree.test"
+
+DOMAIN = os.getenv('DJANGO_DOMAIN', 'pizzarree.net')
+TRUSTED_HOSTS = ['.%s' % DOMAIN, DOMAIN, 'localhost', '127.0.0.1', 'web']
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',') if os.getenv('DJANGO_ALLOWED_HOSTS') else TRUSTED_HOSTS
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST', 'smtp.mailtrap.io')
+EMAIL_PORT = os.getenv('DJANGO_EMAIL_PORT', '2525')
+EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_HOST_USER', 'd8085a33ba56ab')
+EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_HOST_PASSWORD', 'fd21ce88840f38')
+EMAIL_USE_TLS = bool(literal_eval(os.getenv('DJANGO_EMAIL_USE_TLS', '0')))
+EMAIL_USE_SSL = bool(literal_eval(os.getenv('DJANGO_EMAIL_USE_SSL', '0')))
+FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o755
+FILE_UPLOAD_PERMISSIONS = 0o644
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG
+SECURE_HSTS_SECONDS = 3600 # restrict access only via https
+# # SECURE_SSL_REDIRECT = not DEBUG # handled by haproxy
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+SECURE_REFERRER_POLICY = ['same-origin']
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # EMAIL_BACKEND = "django.core.mail.backendnds.console.EmailBackend"
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-EMAIL_HOST_USER = 'a571812ba39b6d'
-EMAIL_HOST_PASSWORD = 'ee0e4489a103b8'
-EMAIL_PORT = '2525'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -70,9 +84,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'pizzarree_api.urls'
 STATIC_URL = '/static/' #alias for static_root
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static_src")
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "static_src")
+# ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -106,7 +120,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },
+    # 'default': {
+    #     'ENGINE': 'django_tenants.postgresql_backend',
+    #     'NAME': os.getenv('DJANGO_DB_NAME', 'django_tenants'),
+    #     'USER': os.getenv('DJANGO_DB_USER', 'django_tenants'),
+    #     'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'django_tenants'),
+    #     'HOST': os.getenv('POSTGRES_HOST', 'postgres'),
+    #     'PORT': os.getenv('POSTGRES_PORT', 5432),
+    # }
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -163,6 +185,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
 GRAPH_MODELS = {
   'all_applications': True,
   'group_models': True,

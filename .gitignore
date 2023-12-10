@@ -1,4 +1,5 @@
 .DS_Store
+./docker_data/
 .thumbs.db
 .venv/
 node_modules
