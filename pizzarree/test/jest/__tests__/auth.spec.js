@@ -15,7 +15,7 @@ describe("App User", () => {
 
   beforeEach(async () => {
     wrapper = await mountRouteSuspense(App);
-    authStore = useAuthStore({});
+    authStore = useAuthStore();
   });
 
   afterEach(async () => {

@@ -183,7 +183,9 @@ class PaymentViewSet(PaymentGateway, ViewSet):
 
         if intent.status == 'succeeded':
             Cart(request).clear()
+            request.session.flush()
             # if coupon used invalidate it
+            # cleanup server session
 
             # headers = {'X-Frame-Options': 'ALLOW-FROM https://*.stripe.com'}
             #TODO: send email to user to

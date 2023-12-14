@@ -34,7 +34,7 @@ export const useShopStore = defineStore("shop", {
       return state.cart
     },
     hasCurrentPendingOrder:(state)=>{
-      return Object.keys(state.order).length > 0 ;
+      return Object.keys(state.order).length > 0 && Object.hasOwnProperty(state.order, 'id') ;
     },
     AuthUser: (state)=>{
       const user = useAuthStore();
@@ -42,11 +42,13 @@ export const useShopStore = defineStore("shop", {
     },
   },
   actions: {
+
     async clearCart(){
       this.cart = {};
       this.order = {};
       await this.router.push({name:"Done", query:{message: 'Order Successful', level:'success'}})
     },
+
     async serverCartSanityCheck(){
       let active_session_cart_items= await api.get('api/v1/shop/cart/details/');
       let comparer = JSON.parse(JSON.stringify(Object.values(this.cart))).flatMap(x=>x).flat();
@@ -64,6 +66,7 @@ export const useShopStore = defineStore("shop", {
       }
       return sameObj();
     },
+
     async postToApiCart(data, url="api/v1/shop/cart/add/") {
       api.defaults.withCredentials = true
       //todo: sanity check for adjusted active session orders
@@ -78,11 +81,7 @@ export const useShopStore = defineStore("shop", {
       await api
         .post(url, data) // add to cart
         .then(async (response) => {
-          if(this.hasCurrentPendingOrder){
-            await this.updateOrder(`api/v1/shop/orders/${this.order.id}/`)
-          }else{
-            await this.createOrder('api/v1/shop/orders/')
-          }
+            await this.createOrUpdateOrder();
         })
       .catch(e=> Notify.create({type: 'negative', message: e.response?.data?.detail, closeBtn:true}))
     },
@@ -92,27 +91,25 @@ export const useShopStore = defineStore("shop", {
         .then((data)=>console.log(data))
         .catch(e=> Notify.create({type: 'negative', message: e.response.data.detail, closeBtn:true}))
     },
-    async createOrder(url) {
+    async createOrUpdateOrder(redirects=true) {
       api.defaults.withCredentials = true
-      await api
-        .post(url, {"email":this.customer_email})
+      let url;
+      let method;
+      if(this.hasCurrentPendingOrder){
+        url = `api/v1/shop/orders/${this.order.id}/`;
+        method = 'put';
+      }else{
+        url = 'api/v1/shop/orders/';
+        method = 'post';
+      }
+      await api[method](url, {"email":this.customer_email})
         .then(async ({data}) => {
           Object.assign(this.order, data);
+          if(redirects)
           await this.router.push({name:"Checkout"})
         })
         .catch(e=> Notify.create({type: 'negative', message: e.message, closeBtn:true}))
     },
-    async updateOrder(url) {
-        api.defaults.withCredentials = true
-        await api
-          .put(url, {"email":this.customer_email})
-          .then(async ({data}) => {
-            console.log('after uodate', data)
-            Object.assign(this.order, data);
-            await this.router.push({name:"Checkout"})
-          })
-          .catch(e=> Notify.create({type: 'negative', message: e.message, closeBtn:true}))
-      },
     async addToLocalCart(id, products){
       this.cart[id] = [products]
     },

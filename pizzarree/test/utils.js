@@ -9,7 +9,11 @@ import {createPinia} from "pinia";
 import authGuard from "src/boot/auth_guard";
 import {qLayoutInjections} from "@quasar/quasar-app-extension-testing-unit-jest";
 import RouterViewSuspense from "components/partials/RouterViewSuspense.vue";
+
 import axios from "axios";
+import {QDialog} from "quasar";
+
+
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -74,18 +78,21 @@ export const mountRouteSuspense = async (Component, options) => {
     }),
     {
       global: {
-        plugins: [router, i18n, testStore],
+        plugins: [router, i18n, realStore],
         stubs: {
           AppSvgIcon: true,
           SvgIcon: true,
           DarkButton: true,
           LanguageSwitcher: true,
           ComingSoon: true,
+          // transition: false,
           RouterViewSuspense: RouterViewSuspense,
-          QEditor: true, // this make test fails maximum call exceeded
+          // QDialog:QDialog,
+          // QEditor: true, // this make test fails maximum call exceeded
         },
         // mocks: {},
         provide: qLayoutInjections(),
+
       },
       ...options,
     }
