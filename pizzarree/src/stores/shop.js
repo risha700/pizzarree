@@ -40,6 +40,13 @@ export const useShopStore = defineStore("shop", {
       const user = useAuthStore();
       return user
     },
+    flatCartProducts:(state)=>{
+      return Object.values(state.cart).flatMap(
+      ({items, quantity})=> ({items, quantity})).map(
+        ({items, quantity})=>Object.values(items).flat().map(x=>[{id:x.id, quantity}]))
+        .flat().flatMap(x=>x)
+
+    }
   },
   actions: {
 
@@ -51,20 +58,13 @@ export const useShopStore = defineStore("shop", {
 
     async serverCartSanityCheck(){
       let active_session_cart_items= await api.get('api/v1/shop/cart/details/');
-      let comparer = JSON.parse(JSON.stringify(Object.values(this.cart))).flatMap(x=>x).flat();
-      let temp = active_session_cart_items.data['cart'];
-      let transformedCartItems = [];
-      temp.forEach((item)=>{
-        for (let i = 0; i < Number(item.quantity); i++) {
-          transformedCartItems.push(item.product.id)
-        }
-      })
-      const sameObj = ()=>  JSON.stringify(transformedCartItems.sort()) === JSON.stringify(comparer.flatMap(x=>x.id).sort());
-      const cartIsDirty = ()=>Object.keys(active_session_cart_items.data).length !== 0;
-      if (cartIsDirty() && !sameObj()){
+      let transformedCartItems = active_session_cart_items.data.cart.flatMap((p)=>({id: p.product.id, quantity:p.quantity}))
+      const sameObj = JSON.stringify(this.flatCartProducts.sort()) === JSON.stringify(transformedCartItems.sort())
+      const cartIsDirty = Object.keys(active_session_cart_items.data).length !== 0;
+      if (cartIsDirty && !sameObj){
           await api.post('api/v1/shop/cart/clear/');
       }
-      return sameObj();
+      return sameObj;
     },
 
     async postToApiCart(data, url="api/v1/shop/cart/add/") {
@@ -108,21 +108,41 @@ export const useShopStore = defineStore("shop", {
           if(redirects)
           await this.router.push({name:"Checkout"})
         })
-        .catch(e=> Notify.create({type: 'negative', message: e.message, closeBtn:true}))
+        .catch(e=> {
+          console.log(e.message)
+          Notify.create({type: 'negative', message: e.message, closeBtn: true});
+        })
     },
     async addToLocalCart(id, products){
-      this.cart[id] = [products]
+      // adding to local cart
+      const comparer= (x)=>JSON.stringify(Object.values(x))
+      let duplicate=false;
+      let idx = id;
+      for (const cartItemId in this.cart) {
+        if(comparer(this.cart[cartItemId].items.flat().sort())=== comparer(products.sort())){
+            duplicate = true;
+            idx = cartItemId;
+        }
+      }
+      if(duplicate){
+        this.cart[idx].quantity +=1;
+      }else{
+        this.cart[idx]  = {items:[products], quantity:1}
+
+      }
+        // this.cart[id] = [products]
+
     },
-   async retrieveProducts(url){
+   async retrieveProducts(url='api/v1/shop/products'){
       let response = await api.get(url);
       let all_products = response.data.results;
       this.products.drinks = all_products.filter((m)=>m.tags.includes('drink'))
-     this.products.pizzas = all_products.filter((m)=>m.tags.includes('pizza'))
-     this.products.deserts = all_products.filter((m)=>m.tags.includes('desert'))
-     this.products.toppings = all_products.filter((m)=>m.tags.includes('topping'))
-     this.products.sides = all_products.filter((m)=>m.tags.includes('side'))
-     this.products.sizes = all_products.filter((m)=>m.tags.includes('size'))
-     this.products.crusts = all_products.filter((m)=>m.tags.includes('crust'))
+      this.products.pizzas = all_products.filter((m)=>m.tags.includes('pizza'))
+      this.products.deserts = all_products.filter((m)=>m.tags.includes('desert'))
+      this.products.toppings = all_products.filter((m)=>m.tags.includes('topping'))
+      this.products.sides = all_products.filter((m)=>m.tags.includes('side'))
+      this.products.sizes = all_products.filter((m)=>m.tags.includes('size'))
+      this.products.crusts = all_products.filter((m)=>m.tags.includes('crust'))
    },
    async setupCustomerOrderEmail(){
       if(this.AuthUser.isAuthenticated){

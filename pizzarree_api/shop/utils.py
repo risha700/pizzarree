@@ -5,6 +5,7 @@ import taggit
 from django.db.models import Q
 from django.utils import timezone
 from rest_framework import filters
+from rest_framework.pagination import PageNumberPagination
 from taggit.forms import TagField
 
 from shop.models import Product, Coupon
@@ -73,6 +74,11 @@ class OrderUUIDAuthedFilter(filters.BaseFilterBackend):
                 queryset = queryset.filter(identifier=identifier, email=request.user.email).distinct()
         return queryset
 
+
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 1000
+    page_size_query_param = 'page_size'
+    max_page_size = 10000
 
 def is_jsonable(x):
     try:

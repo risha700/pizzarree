@@ -15,7 +15,7 @@ from shop.models.cart import Cart
 from shop.payment_gateway import PaymentGateway
 from shop.permissions import IsAuthorized, IsOrderOwner
 from shop.serializers import ProductSerializer, OrderSerializer
-from shop.utils import ProductFilterClass, OrderUUIDAuthedFilter, TagsFilter, is_jsonable
+from shop.utils import ProductFilterClass, OrderUUIDAuthedFilter, TagsFilter, is_jsonable, LargeResultsSetPagination
 from django.utils.translation import gettext_lazy as _
 
 
@@ -23,6 +23,7 @@ class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
     filter_backends = (DjangoFilterBackend,TagsFilter)
     # filterset_fields = ('slug', 'id')
+    pagination_class = LargeResultsSetPagination
 
     filter_class = ProductFilterClass
     # filterset_class = ProductFilterClass

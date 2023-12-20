@@ -1,29 +1,48 @@
 
 <template>
-  <q-page-container>
-    <q-card class="q-pa-lg">
+  <q-page-container class="q-pa-lg flex  items-start tw-gap-10">
+    <q-card class="q-pa-lg tw-flex-auto">
+      <div class="text-h6 tw-border-b-2 tw-border-dashed tw-mb-2"> Order# {{order.id}} Summary</div>
+
+      <template v-for="(product, id) in store.cart" :key="id">
+        <template v-for="item in product.items" :key="item.id+id">
+            <template v-for="nestedItem in item" :key="nestedItem.id">
+              <div class="flex justify-between items-center content-between"
+                   :class="nestedItem.name === item[0].name?'tw-min-w-[300px]':'row inline wrap q-ml-lg text-italic'">
+                <div>{{nestedItem.name}}</div>
+                <div v-if="nestedItem.name === item[0].name">{{product.quantity}}x</div>
+              </div>
+            </template>
+        </template>
+      </template>
+      <div class="tw-border-solid tw-border-t-2 column justify-start tw-my-4 ">
+        <div class="text-h5 tw-text-green-400 " v-if="order.discount_value">Discounts {{order.discount_value}}</div>
+        <div class="text-h5 tw-mt-2">Total {{order.total_cost}}</div>
+      </div>
+    </q-card>
+    <q-card class="q-pa-lg tw-flex-auto">
       <q-banner rounded v-if="errors"  class="text-white bg-red q-mb-lg">
         {{errors}}
       </q-banner>
-
-      <form id="checkout-form" class="column" @submit.prevent="handleSubmit" >
+      <q-form id="checkout-form" class="column" @submit.prevent="handleSubmit" >
         <div id="payment-methods"></div>
         <div id="link-authentication-element" />
         <q-btn type="submit" align="center" color="secondary" stretch label="Pay Now" class="q-mt-lg" :disable="processing"/>
-      </form>
+      </q-form>
     </q-card>
+
   </q-page-container>
 
 </template>
 
 <script>
-import {defineComponent, onMounted, ref} from 'vue'
+import {defineComponent, onBeforeMount, onMounted, ref} from 'vue'
 import {loadStripe} from '@stripe/stripe-js';
 import {useShopStore} from "stores/shop";
 import {storeToRefs} from "pinia";
 import {Dark, Notify} from "quasar";
 import {api} from "boot/axios";
-import {useRouter} from "vue-router";
+import {onBeforeRouteUpdate, useRouter} from "vue-router";
 
 export default defineComponent({
   name: "CheckoutComponent",
@@ -33,32 +52,19 @@ export default defineComponent({
     const router = useRouter();
     const errors = ref(null);
     const processing = ref(false);
-
     const handleErrors = (err)=>errors.value = err;
-    onMounted(()=>{
-      console.log(order.value.id)
+
+    onMounted(async ()=>{
+        if(order.value.id)
+
         paymentElement.mount('#payment-methods')
         // linkAuthenticationElement.mount("#link-authentication-element");
     })
+
     const stripe = await loadStripe('pk_test_RUZqAN8CkTK39VGr7FuIxPWE', {
           // stripeAccount: '{{CONNECTED_STRIPE_ACCOUNT_ID}}',
     });
 
-
-    var elements = await stripe.elements({
-        mode: 'payment',
-        // amount: 9999,
-        amount: Math.round(order.value.total_cost.toFixed(2)*100),
-        currency: 'usd',
-        paymentMethodCreation: 'manual',
-        appearance:{theme:Dark.isActive?'night':'stripe'},
-
-    });
-  const paymentElement = await elements.create('payment',{
-      layout: {
-        type: 'tabs',
-      },
-  });
     const handleSubmit = async (e) => {
         // Trigger form validation and wallet collection
       processing.value = true;
@@ -79,10 +85,11 @@ export default defineComponent({
         }
       });
 
+
+
       if (error) {
         return handleErrors(error.message);
       }
-
        await api.post(`api/v1/shop/payment/checkout/${order.value.id}/`, {paymentMethodId:paymentMethod.id})
          .then(async (res)=> await handleServerResponse(res))
          .catch((err)=>{
@@ -91,6 +98,20 @@ export default defineComponent({
 
       processing.value = false;
     }
+
+    var elements = await stripe.elements({
+        mode: 'payment',
+        amount: Math.round(order.value.total_cost?.toFixed(2)*100),
+        currency: 'usd',
+        paymentMethodCreation: 'manual',
+        appearance:{theme:Dark.isActive?'night':'stripe'},
+
+    });
+    const paymentElement = await elements.create('payment',{
+        layout: {
+          type: 'tabs',
+        },
+    });
 
     const handleServerResponse = async (response) => {
       if (response.data && response.data.error) {
@@ -122,12 +143,19 @@ export default defineComponent({
       }
     }
 
+    if(!order.value.id){
+      await router.push({name:'Menu'});
+      errors.value = 'seems that your cart is empty!'
+      return {errors, handleSubmit, processing, store}
+    }
+
 
     return{
       elements,
-      paymentElement,
+      // paymentElement,
       handleSubmit,
-      errors, processing
+      errors, processing,
+      stripe,order,store
     }
   },
 })

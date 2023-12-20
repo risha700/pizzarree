@@ -1,8 +1,12 @@
 <template>
-  <div  v-if="products && products.length" class="flex tw-gap-10 tw-p-10" >
-    <h6>{{header_title}}</h6>
-    <div v-for="product in products" :key="product.id" >
-      <ProductCard :product="product" @show-modal="showProductDetails" ></ProductCard>
+  <div  v-if="products && products.length" class="row tw-py-8 tw-p-0" >
+    <div class="col-md-1">
+      <h6 class="text-capitalize">{{header_title}}</h6>
+    </div>
+    <div class="flex  tw-gap-4 justify-md-start">
+      <template v-for="product in products" :key="product.id"  >
+        <ProductCard :product="product" @show-modal="showProductDetails" ></ProductCard>
+      </template>
     </div>
     <ProductModal :model-value="showModal" :product="chosenProduct" @hide-modal="hideHandler"/>
   </div>

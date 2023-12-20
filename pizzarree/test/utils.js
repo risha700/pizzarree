@@ -1,4 +1,4 @@
-import {defineComponent,h,Suspense } from 'vue'
+import {defineComponent, h, markRaw, Suspense} from 'vue'
 import {flushPromises, mount} from '@vue/test-utils'
 import {createRouter, createWebHistory} from "vue-router";
 import routes from "src/router/routes";
@@ -11,7 +11,8 @@ import {qLayoutInjections} from "@quasar/quasar-app-extension-testing-unit-jest"
 import RouterViewSuspense from "components/partials/RouterViewSuspense.vue";
 
 import axios from "axios";
-import {QDialog} from "quasar";
+import {Dialog, Notify, QDialog} from "quasar";
+import {jest} from "@jest/globals";
 
 
 
@@ -32,7 +33,8 @@ export const setupUtils = () => {
   global.window.axios = axios;
   global.window.delay = jest.fn();
   global.window.scrollTo = jest.fn();
-  jest.mock("axios", () => {
+  global.window.WebSocket = jest.fn();
+  global.window.mockedAxios = jest.mock("axios", () => {
     return {
       create: jest.fn(() => ({
         get: jest.fn(),
@@ -46,6 +48,8 @@ export const setupUtils = () => {
       })),
     };
   });
+
+
 };
 export const mountSuspense = async (component, options) => {
   const wrapper = mount(
@@ -69,7 +73,9 @@ export const testStore = createTestingPinia();
 export const realStore = createPinia();
 
 
-
+realStore.use(({ store }) => {
+  store.router = markRaw(router)
+});
 export const mountRouteSuspense = async (Component, options) => {
   const wrapper = mount(
     defineComponent({
@@ -88,6 +94,8 @@ export const mountRouteSuspense = async (Component, options) => {
           // transition: false,
           RouterViewSuspense: RouterViewSuspense,
           // QDialog:QDialog,
+          Notify: false,
+          Component:Component
           // QEditor: true, // this make test fails maximum call exceeded
         },
         // mocks: {},

@@ -119,7 +119,7 @@ export default defineComponent({
     let selectedToppings = ref([]);
     let selectedSize = ref(null);
     let selectedCrust = ref(null);
-    let myPizza = ref(null);
+    let myPizza = ref([]);
     let currentPassedProduct = ref({});
     let currentPassedId = ref(null);
     const updateProductInCart = ()=>{
@@ -175,13 +175,8 @@ export default defineComponent({
 
     }
     watch([selectedSize,selectedCrust,selectedToppings],(val)=>{
-      // console.log('watch changing..', val)
       myPizza.value = val.flat();
       myPizza.value.unshift(currentPassedProduct.value)
-
-
-
-
     });
 
     return{

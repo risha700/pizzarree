@@ -9,14 +9,15 @@
 </template>
 
 <script>
-import {defineComponent, onMounted} from "vue";
-import CheckoutComponent from "components/shop/CheckoutComponent.vue";
+import {defineAsyncComponent, defineComponent} from "vue";
 import SuspenseWithErrors from "components/partials/SuspenseWithErrors.vue";
-
 
 export default defineComponent({
   name: 'CheckoutPage',
-  components: {SuspenseWithErrors, CheckoutComponent}
+  components: {SuspenseWithErrors,
+    CheckoutComponent:defineAsyncComponent(()=> import('components/shop/CheckoutComponent.vue')),
+  },
+
 })
 </script>
 <style scoped>

@@ -2,7 +2,7 @@ import { describe, jest, expect, test, afterEach, beforeEach } from "@jest/globa
 import { installQuasarPlugin } from "@quasar/quasar-app-extension-testing-unit-jest";
 import { DOMWrapper, flushPromises, mount } from "@vue/test-utils";
 import App from "src/App";
-import {mountRouteSuspense, mountSuspense, router, setupUtils} from "app/test/utils";
+import {mountRouteSuspense, mountSuspense, router, setupUtils, testStore} from "app/test/utils";
 import {useShopStore} from "stores/shop";
 import { api } from "src/boot/axios";
 import CartComponent from "components/shop/CartComponent.vue";
@@ -22,6 +22,7 @@ import {nextTick} from "vue";
 
 installQuasarPlugin({plugins:{Notify, Dark}});
 setupUtils();
+
 
 
 
@@ -244,7 +245,7 @@ let mockSuccessfulOrderPayload = {
     "shipping_address": null
 }
 
-describe("Shop", () => {
+describe("Payment", () => {
   let wrapper;
   let shopStore;
   let push = jest.spyOn(router, "push");
@@ -254,204 +255,85 @@ describe("Shop", () => {
   let api_put = jest.spyOn(api, "put");
   // const  mockedStripe = jest.requireActual('@stripe/stripe-js');
   // let loadTestStripe = jest.spyOn(mockedStripe, 'loadStripe')
-  // window.Stripe = jest.fn(()=> Promise.resolve(loadTestStripe('pk_test_RUZqAN8CkTK39VGr7FuIxPWE')))
-  // window.Stripe = jest.fn().mockReturnValue(loadTestStripe('pk_test_RUZqAN8CkTK39VGr7FuIxPWE'))
-  let documentWrapper= new DOMWrapper(document.body)
-  // const actualMockStripe = jest.requireActual('@stripe/stripe-js')
-  // window.Stripe = async ()=> await actualMockStripe.loadStripe('pk_test_RUZqAN8CkTK39VGr7FuIxPWE')
 
+  let documentWrapper = new DOMWrapper(document.body)
 
   beforeEach(async () => {
-    wrapper = await mountRouteSuspense(App,{
-      shallow:false,
-
-      });
-
+    wrapper = await mountRouteSuspense(App);
     shopStore = useShopStore();
-    // jest.resetAllMocks();
-
-  });
-  afterEach(async () => {
-    // jest.restoreAllMocks()
-    // shopStore?.$reset();
-    // router.options.history.destroy(); // this doesnt reset router you need to create new instance
-    // await router.isReady();
+    await nextTick();
   });
 
-  test("renders menu page with products", async () => {
-    push({ name: "Menu" });
-    api_get.mockResolvedValue({status:200, data:mockProductsList})
-    await flushPromises();
-    expect(api_get).toHaveBeenCalledTimes(1)
-    expect(router.currentRoute.value.name).toEqual("Menu");
-    let page = await wrapper.find(".q-page-container");
-    expect(page.html()).not.toBe("");
-    expect(page.html()).toContain(mockProductsList.results[0].name)
-  });
+  test('it shows checkout form',async()=>{
 
-  test("user can view memu page", async () => {
-    // I have a menu
-    push({ name: "Menu" });
-    await flushPromises();
-    expect(router.currentRoute.value.name).toEqual("Menu");
-  });
+    api_get.mockResolvedValueOnce({status:200, data:mockProductsList})
+    push({name:'Menu'})
+    await nextTick()
 
-  test("user can choose item from menu", async () => {
-
-    push({ name: "Menu" });
-    await flushPromises();
-
-    expect(router.currentRoute.value.name).toEqual("Menu");
-    // I have products in the store
-    expect(shopStore.products).not.toBe({});
-    let any_prod_img = await wrapper.findAll('img')[0]; // margreta pizza
-    await any_prod_img.trigger('click');
-    await flushPromises();
-    // I have a popup product modal
-    let product_card = await wrapper.getComponent(ProductCard);
-    expect(product_card.emitted()).toHaveProperty('showModal')
-
-    let menu = await wrapper.getComponent(MenuComponent);
-    expect(menu.vm.showModal).toBeTruthy();
-    // expect(menu.vm.chosenProduct).toEqual(mockProductsList.results[3]);
-    let product_modal = await wrapper.findComponent(ProductModal);
-    expect(product_card.vm.product).toEqual(menu.vm.chosenProduct)
-    expect(product_modal.vm.modelValue).toBeTruthy();
-    expect(product_modal.vm.currentPassedProduct).toEqual(product_modal.vm.product)
-
-
-    expect(product_modal.vm.myPizza.length).toBe(1)
-    expect(documentWrapper.html()).toContain('q-dialog')
-    let radios = documentWrapper.findAll('.q-radio ')
-    radios.forEach(x=>x.trigger('click')) // choose all
-    await flushPromises();
-    expect(product_modal.vm.myPizza.length).toBe(radios.length);
-    //
-    let modal_btns = documentWrapper.findAll("button");
-    let add_to_order = modal_btns.filter(m=>m.text().includes("Add"))[0]
-    await add_to_order.trigger("click");
-    await flushPromises();
-    expect(product_modal.emitted()).toHaveProperty('hideModal');
-    expect(shopStore.cart[Object.keys(shopStore.cart)[0]].items).toContain(product_modal.vm.myPizza)
-
-  });
-
-  test("user can view cart", async () => {
-    // I have a cart with a pizza
-    push({ name: "Cart" });
-    await flushPromises();
-    // console.log(shopStore.cart)
-    let cart_component = wrapper.getComponent(CartComponent);
-    expect(router.currentRoute.value.name).toEqual("Cart");
-    expect(Number(cart_component.vm.cartTotal)).toEqual(18.36)
-    // console.log(wrapper.html())
-    expect(wrapper.html()).toContain("Margreta");
-  });
-  test("user can edit item in cart", async () => {
-    // I have a cart with a pizza
-    push({ name: "Cart" });
-    await flushPromises();
-    let cart_component = wrapper.getComponent(CartComponent);
-    let btns = cart_component.findAll("button");
-    let editBtn =  btns.find(b=>b.html().includes('edit'));
-    // remove the order item
-    editBtn.trigger('click');
-    await flushPromises();
-
-    let radios = documentWrapper.findAll('.q-radio ')
-
-    expect(documentWrapper.html()).toContain(' role="dialog"')
-    // need to test the toppings
-
-  });
-
-    test("user can remove from cart", async () => {
-    // I have a cart with a pizza
-    push({ name: "Cart" });
-    await flushPromises();
-    let cart_component = wrapper.getComponent(CartComponent);
-    let btns = cart_component.findAll("button");
-    let removeBtn =  btns.find(b=>b.html().includes('delete'));
-    // remove the order item
-    removeBtn.trigger('click');
-    await flushPromises();
-
-    expect(wrapper.html()).toContain("Shopping")
-    let checkoutBtn =  btns.find(b=>b.html().includes('Checkout'));
-    // expect(checkoutBtn.html()).toContain('disabled=""')
-    expect(checkoutBtn.attributes()).toHaveProperty('disabled')
-    expect(Number(cart_component.vm.cartTotal)).toEqual(0)
-  });
-
-  test('user can checkout a cart', async ()=>{
-    // visit menu page
-    push({ name: "Menu" });
-    expect(shopStore.products).not.toBe({});
-    await flushPromises();
-    // click the image for product modal
-    let any_prod_img = await wrapper.findAll('img')[0]; // margreta pizza
-    await any_prod_img.trigger('click');
-    // adjust size and crust
-    let radios = documentWrapper.findAll('.q-radio ')
-    radios.forEach(x=>x.trigger('click')) // choose all
-    await flushPromises();
-    // finding add to cart btn
-    let modal_btns = documentWrapper.findAll("button");
-    let add_to_order = modal_btns.filter(m=>m.text().includes("Add"))[0]
-    await add_to_order.trigger("click");
-    // go to cart
+    api_get.mockResolvedValueOnce({status:200, data:mockCartDetail})
+    api_post.mockResolvedValueOnce({status:201, message:"Cart Updated"})
     push({name:'Cart'})
+    await nextTick()
     await flushPromises()
-    let cart_component = await wrapper.getComponent(CartComponent)
-    expect(Number(cart_component.vm.cartTotal)).toEqual(18.36)
-    expect(cart_component.vm.isCartEmpty).toBeFalsy();
+    // push({name:'Checkout'})
+    // await nextTick()
+    // await flushPromises()
+    // let cart_component = wrapper.getComponent(CheckoutPage);
 
-
-
-    // const mockStripeConstructor = window.Stripe;
-    // const mockStripe = jest.mock('@stripe/stripe-js', ()=>{
-    //   return{
-    //     ...actualMockStripe,
-    //     // loadStripe:()=>jest.fn(()=>Promise.resolve(mockStripe.loadStripe('pk_test_RUZqAN8CkTK39VGr7FuIxPWE'))),
-    //     // elements:{
-    //     //     default:()=>jest.fn(()=>Promise.resolve()),
-    //     //     create:()=>jest.fn(()=>Promise.resolve()),
-    //     // },
-    //     // createPaymentMethod:()=>jest.fn(()=>Promise.resolve()),
     //
-    //   }
-    // })
-
-    // check it out
-
-    let checkout_btn = wrapper.findAll('button').filter(b=>b.text().includes('Checkout'))[0]
-    expect(checkout_btn.attributes()).not.toHaveProperty('disabled');
-    api_get.mockResolvedValue({status:200, data:mockCartDetail})
-    api_post.mockResolvedValue({status:201, message:"Cart Updated"})
-
-    await checkout_btn.trigger('click');
-
-    api_post.mockResolvedValue({status:201, data:mockSuccessfulOrderPayload})
-
-
-    await flushPromises();
-    expect(router.currentRoute.value.name).toEqual("Checkout");
+    // api_post.mockResolvedValueOnce({status:201, data:mockSuccessfulOrderPayload})
+    await nextTick()
+   await console.log(wrapper.text())
 
   });
+  test.skip('can load stripe', async () => {
+     const mockElement = () => ({
+      mount: jest.fn(),
+      destroy: jest.fn(),
+      on: jest.fn(),
+      update: jest.fn(),
+    })
 
-  // test('can load stripe form', async ()=>{
-  //
-  //   await flushPromises();
-  //
-  //   expect(router.currentRoute.value.name).toEqual("Checkout");
-  //   const checkout_comp = wrapper.findComponent(checkoutPage)
-  //   // wrapper = await mountRouteSuspense(checkoutPage,{  attachTo:document.body})
-  //   await flushPromises();
-  //   await checkout_comp.vm.$nextTick()
-  //    console.log(await checkout_comp.html())
-  // });
+    const mockElements = () => {
+      const elements = {};
+      return {
+              create: jest.fn((type) => {
+              elements[type] = mockElement();
+              return elements[type];
+            }),
+            getElement: jest.fn((type) => {
+              return elements[type] || null;
+            }),
+          }
+      }
+
+    const mockedStripe = () => ({
+      elements: jest.fn(() => mockElements()),
+      createToken: jest.fn(),
+      loadScript: jest.fn(),
+      loadStripe: jest.fn(),
+      createSource: jest.fn(),
+      createPaymentMethod: jest.fn(),
+      confirmCardPayment: jest.fn(),
+      confirmCardSetup: jest.fn(),
+      paymentRequest: jest.fn(),
+      _registerWrapper: jest.fn(),
+    })
+    const mockStripe = jest.requireActual('@stripe/stripe-js')
+
+    jest.mock('@stripe/stripe-js', () => {
+
+      return ({
+        ...mockStripe,
+        elements: () => {
+          return mockElements
+        },
+        createPaymentMethod: () => {
+          return mockedStripe
+        },
+      })
+    })
 
 
-
-
+    });
 });
