@@ -14,7 +14,8 @@ import SuspenseWithErrors from "components/partials/SuspenseWithErrors.vue";
 
 export default defineComponent({
   name: 'CheckoutPage',
-  components: {SuspenseWithErrors,
+  components: {
+    SuspenseWithErrors,
     CheckoutComponent:defineAsyncComponent(()=> import('components/shop/CheckoutComponent.vue')),
   },
 

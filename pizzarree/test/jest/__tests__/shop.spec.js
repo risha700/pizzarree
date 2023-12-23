@@ -252,15 +252,20 @@ describe("Shop", () => {
   let api_post = jest.spyOn(api, "post");
   let api_patch = jest.spyOn(api, "patch");
   let api_put = jest.spyOn(api, "put");
+  let documentWrapper= new DOMWrapper(document.body)
   // const  mockedStripe = jest.requireActual('@stripe/stripe-js');
   // let loadTestStripe = jest.spyOn(mockedStripe, 'loadStripe')
-  // window.Stripe = jest.fn(()=> Promise.resolve(loadTestStripe('pk_test_RUZqAN8CkTK39VGr7FuIxPWE')))
-  // window.Stripe = jest.fn().mockReturnValue(loadTestStripe('pk_test_RUZqAN8CkTK39VGr7FuIxPWE'))
-  let documentWrapper= new DOMWrapper(document.body)
-  // const actualMockStripe = jest.requireActual('@stripe/stripe-js')
-  // window.Stripe = async ()=> await actualMockStripe.loadStripe('pk_test_RUZqAN8CkTK39VGr7FuIxPWE')
-
-
+  // loadTestStripe.mockResolvedValue({
+  //   ...mockedStripe,
+  //   _api_key: 'pk_test_RUZqAN8CkTK39VGr7FuIxPWE',
+  //   _createPaymentMethod: jest.fn(),
+  //   elements:()=>{
+  //     return{
+  //          default:jest.fn(),
+  //         create: jest.fn()
+  //     }
+  //   }
+  // })
   beforeEach(async () => {
     wrapper = await mountRouteSuspense(App,{
       shallow:false,
@@ -405,24 +410,6 @@ describe("Shop", () => {
     let cart_component = await wrapper.getComponent(CartComponent)
     expect(Number(cart_component.vm.cartTotal)).toEqual(18.36)
     expect(cart_component.vm.isCartEmpty).toBeFalsy();
-
-
-
-    // const mockStripeConstructor = window.Stripe;
-    // const mockStripe = jest.mock('@stripe/stripe-js', ()=>{
-    //   return{
-    //     ...actualMockStripe,
-    //     // loadStripe:()=>jest.fn(()=>Promise.resolve(mockStripe.loadStripe('pk_test_RUZqAN8CkTK39VGr7FuIxPWE'))),
-    //     // elements:{
-    //     //     default:()=>jest.fn(()=>Promise.resolve()),
-    //     //     create:()=>jest.fn(()=>Promise.resolve()),
-    //     // },
-    //     // createPaymentMethod:()=>jest.fn(()=>Promise.resolve()),
-    //
-    //   }
-    // })
-
-    // check it out
 
     let checkout_btn = wrapper.findAll('button').filter(b=>b.text().includes('Checkout'))[0]
     expect(checkout_btn.attributes()).not.toHaveProperty('disabled');

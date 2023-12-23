@@ -73,7 +73,8 @@ module.exports = configure(function (ctx) {
         //TODO:load it from env
         VUE_APP_NAME: "Pizzarree Shop",
         VUE_APP_API_BASE_URL: "https://localhost:8000/",
-        VUE_ENCRYPTION_KEY:"K/mTy6EXQjLJsJAVW0IlO+ns7wpZBea+PDI2/V7421Y=",
+        VUE_ENCRYPTION_KEY:"KvmTy6EXQjLJsJAVW0IlO+ns7wpZBea+PDI2vV7421Y=",
+        VUE_STRIPE_PUBLISHABLE_KEY:"pk_test_RUZqAN8CkTK39VGr7FuIxPWE",
 
       },
       // Options below are automatically set depending on the env, set them if you want to override

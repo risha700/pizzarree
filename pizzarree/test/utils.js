@@ -13,27 +13,14 @@ import RouterViewSuspense from "components/partials/RouterViewSuspense.vue";
 import axios from "axios";
 import {Dialog, Notify, QDialog} from "quasar";
 import {jest} from "@jest/globals";
+import SuspenseWithErrors from "components/partials/SuspenseWithErrors.vue";
 
-
-
-export const router = createRouter({
-  history: createWebHistory(),
-  routes: routes,
-  mode: "abstract",
-});
-export const i18n = createI18n({
-  legacy: false,
-  locale: "en-US",
-  fallbackLocale: "en-US",
-  globalInjection: true,
-  messages,
-  // silentFallbackWarn: true,
-});
 export const setupUtils = () => {
   global.window.axios = axios;
   global.window.delay = jest.fn();
   global.window.scrollTo = jest.fn();
   global.window.WebSocket = jest.fn();
+
   global.window.mockedAxios = jest.mock("axios", () => {
     return {
       create: jest.fn(() => ({
@@ -51,6 +38,24 @@ export const setupUtils = () => {
 
 
 };
+
+
+export const router = createRouter({
+  history: createWebHistory(),
+  routes: routes,
+  mode: "abstract",
+});
+
+export const i18n = createI18n({
+  legacy: false,
+  locale: "en-US",
+  fallbackLocale: "en-US",
+  globalInjection: true,
+  messages,
+  // silentFallbackWarn: true,
+});
+
+
 export const mountSuspense = async (component, options) => {
   const wrapper = mount(
     defineComponent({
@@ -86,22 +91,17 @@ export const mountRouteSuspense = async (Component, options) => {
       global: {
         plugins: [router, i18n, realStore],
         stubs: {
-          AppSvgIcon: true,
-          SvgIcon: true,
-          DarkButton: true,
-          LanguageSwitcher: true,
-          ComingSoon: true,
-          // transition: false,
-          RouterViewSuspense: RouterViewSuspense,
-          // QDialog:QDialog,
-          Notify: false,
-          Component:Component
-          // QEditor: true, // this make test fails maximum call exceeded
+          // RouterViewSuspense: RouterViewSuspense,
+          // SuspenseWithErrors: SuspenseWithErrors,
+          // Component:Component
         },
+        renderStubDefaultSlot: true,
+        // components: {Component},
         // mocks: {},
         provide: qLayoutInjections(),
 
       },
+      attachTo: document.getElementById('app'),
       ...options,
     }
   );

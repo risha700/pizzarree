@@ -9,7 +9,17 @@ export default {
   //      lines: 50,
   //      statements: 50
   //   },
+
   // },
+   setupFiles: [
+    // '<rootDir>/test/setups/jest-setup.js',
+  ],
+  // testEnvironment: 'jsdom',// default quasar
+  testEnvironmentOptions: {
+        // resources: 'usable',
+        // runScripts: 'dangerously',
+        customExportConditions: ["node", "node-addons"],
+    },
   transform: {
     '.*\\.js$': 'babel-jest',
   },

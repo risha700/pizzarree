@@ -38,10 +38,10 @@ class PaymentGateway:
             customer_id = user_vault.vault_id
         intent = self.gateway.PaymentIntent.create(
             confirm=True,
-            return_url="{}://{}".format( 'https' if request.is_secure() else 'http' ,get_current_site(request).domain),
+            return_url="{}://{}".format( 'https' if request.is_secure() else 'http', get_current_site(request).domain),
             # return_url='https' if request.is_secure() else 'http' + '://' + get_current_site(request).domain,
-            amount=int(order.total_cost*100),
-            currency="usd",
+            amount=int(order.total_cost*100), # pennys required
+            currency="usd", # TODO: store.currency
             automatic_payment_methods={"enabled": True, 'allow_redirects': 'always'},
             payment_method=str(request.data.get('paymentMethodId')),
             use_stripe_sdk=True,
