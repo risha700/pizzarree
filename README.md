@@ -2,6 +2,12 @@
 Pizza App - OPAIC IA512002 Submission 
 
 Author: Ahmed A. <ahbox@outlook.com>
+# Demo
+- Frontend
+  https://shop-demo.amdrs.link
+
+- API
+  https://shop-demo-api.amdrs.link
 
 # Description 
 Fullstack pizza shop built with
@@ -10,7 +16,7 @@ Fullstack pizza shop built with
         - Django Rest framework - Backend
         - VueJs - Frontend
         - Docker & Docker-compose - Devops
-        - SQL Compatible DB
+        - SQL Compatible DB - Postgres
 # Problem Domain
 -  As a business I need a way to automate selling my merchandise (Pizza) and automate the stocks and payment collections throughout the ordering to delivery process.  
 

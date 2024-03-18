@@ -1,6 +1,7 @@
 asgiref==3.7.2
 certifi==2023.11.17
 charset-normalizer==3.3.2
+coverage==7.4.4
 Django==4.2.7
 django-cors-headers==4.3.1
 django-extensions==3.2.3
@@ -13,10 +14,12 @@ Faker==20.1.0
 idna==3.6
 phonenumbers==8.13.26
 Pillow==10.1.0
+psycopg2==2.9.9
 pydot==1.4.2
 pygraphviz==1.11
 pyparsing==3.1.1
 python-dateutil==2.8.2
+python-dotenv==1.0.1
 pytz==2023.3.post1
 requests==2.31.0
 six==1.16.0

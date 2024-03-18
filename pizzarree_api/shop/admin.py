@@ -6,7 +6,8 @@ from shop.models import Product, Order, PaymentLog, UserVault, Coupon, OrderItem
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ["name"]}
-    list_filter = ['tags', 'in_stock']
+    # list_filter = ['tags', 'in_stock']
+    list_filter = ['tags', 'stock']
 # class ProductTagAdmin(admin.TabularInline);
 
 class OrderItemAdmin(admin.TabularInline):

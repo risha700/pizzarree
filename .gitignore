@@ -8,6 +8,7 @@ node_modules
 .quasar
 /dist
 __pycache__/
+*/__pycache__/
 db.sqlite3
 /quasar.config.*.temporary.compiled*
 
@@ -36,6 +37,6 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
-
+.env
 # local .env files
 .env.local*

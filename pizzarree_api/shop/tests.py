@@ -316,7 +316,7 @@ class PaymentTestCase(APITestCase):
         self.assertEqual(checkout_response.json().get('intent_status'), 'succeeded')
         self.assertIsNotNone(checkout_response.json().get('client_secret'))
         order = Order.objects.prefetch_related().get(id=order_res.data.get('id'))
-        self.assertEquals(order.status, "('COMPLETED', 'completed')")
+        self.assertEqual(order.status, "('COMPLETED', 'completed')")
         self.assertTrue(order.paid)
         self.assertEqual(get_cart(checkout_response).cart, {})
 

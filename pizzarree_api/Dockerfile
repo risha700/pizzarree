@@ -43,8 +43,9 @@ RUN pip install --upgrade pip setuptools wheel && pip install --no-deps --no-cac
 COPY . /code/app/
 #COPY ./GeoLite /code/GeoLite/
 WORKDIR /code/app
-RUN python manage.py collectstatic
-RUN python manage.py migrate
+RUN python manage.py collectstatic --noinput
+# RUN python manage.py migrate
+# RUN python loaddata fixtures.json
 RUN addgroup --system django \
     && adduser --system --no-create-home django --ingroup django
 

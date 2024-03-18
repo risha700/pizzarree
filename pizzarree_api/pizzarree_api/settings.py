@@ -14,10 +14,12 @@ import secrets
 import sys
 from ast import literal_eval
 from pathlib import Path
+from dotenv import load_dotenv
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 PROJECT_NAME = os.getenv('DJANGO_PROJECT_NAME', 'Pizzarree Shop')
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
 TESTING = sys.argv[1:2] == ['test']
 FRONTEND_URL = os.getenv('DJANGO_FRONTEND_URL', 'https://pizzarree.net')
 API_WEBHOOK_REDIRECT_EXTENSION = os.getenv('DJANGO_API_WEBHOOK_REDIRECT_EXTENSION', 'done')
@@ -69,6 +71,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'django_filters',
+    'coverage'
 ]
 
 MIDDLEWARE = [
@@ -117,18 +120,18 @@ WSGI_APPLICATION = 'pizzarree_api.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
     # 'default': {
-    #     'ENGINE': 'django_tenants.postgresql_backend',
-    #     'NAME': os.getenv('DJANGO_DB_NAME', 'django_tenants'),
-    #     'USER': os.getenv('DJANGO_DB_USER', 'django_tenants'),
-    #     'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'django_tenants'),
-    #     'HOST': os.getenv('POSTGRES_HOST', 'postgres'),
-    #     'PORT': os.getenv('POSTGRES_PORT', 5432),
-    # }
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # },
+    'default': {
+        "ENGINE": "django.db.backends.postgresql",
+        'NAME': os.getenv('DJANGO_DB_NAME', 'pizzarree_db'),
+        'USER': os.getenv('DJANGO_DB_USER', 'pizzarree'),
+        'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'pizzarree_pass'),
+        'HOST': os.getenv('POSTGRES_HOST', 'pizzarree_db'),
+        'PORT': os.getenv('POSTGRES_PORT', 5432),
+    }
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -221,7 +224,5 @@ REST_FRAMEWORK = {
 }
 CART_SESSION_ID = 'cart'
 
-STRIPE_API_KEY = os.getenv('DJANGO_STRIPE_API_KEY', 'pk_test_RUZqAN8CkTK39VGr7FuIxPWE')
-STRIPE_API_SECRET = os.getenv('DJANGO_STRIPE_API_KEY', 'sk_test_CHbkFTgQWREZlA5ff17sCy1Q')
-
-
+STRIPE_API_KEY = os.getenv('DJANGO_STRIPE_API_KEY', '')
+STRIPE_API_SECRET = os.getenv('DJANGO_STRIPE_API_SECRET', '')

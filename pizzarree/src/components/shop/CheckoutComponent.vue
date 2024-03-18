@@ -1,13 +1,13 @@
 
 <template>
-  <q-page-container class="q-pa-lg flex  items-start tw-gap-10">
+  <q-page-container class="flex items-start q-pa-lg tw-gap-10">
     <q-card class="q-pa-lg tw-flex-auto">
       <div class="text-h6 tw-border-b-2 tw-border-dashed tw-mb-2"> Order# {{order.id}} Summary</div>
 
       <template v-for="(product, id) in store.cart" :key="id">
         <template v-for="item in product.items" :key="item.id+id">
             <template v-for="nestedItem in item" :key="nestedItem.id">
-              <div class="flex justify-between items-center content-between"
+              <div class="flex items-center content-between justify-between"
                    :class="nestedItem.name === item[0].name?'tw-min-w-[300px]':'row inline wrap q-ml-lg text-italic'">
                 <div>{{nestedItem.name}}</div>
                 <div v-if="nestedItem.name === item[0].name">{{product.quantity}}x</div>
@@ -15,7 +15,7 @@
             </template>
         </template>
       </template>
-      <div class="tw-border-solid tw-border-t-2 column justify-start tw-my-4 ">
+      <div class="justify-start tw-border-solid tw-border-t-2 column tw-my-4 ">
         <div class="text-h5 tw-text-green-400 " v-if="order.discount_value">Discounts {{order.discount_value}}</div>
         <div class="text-h5 tw-mt-2">Total {{order.total_cost}}</div>
       </div>
@@ -42,7 +42,7 @@ import {storeToRefs} from "pinia";
 import {Dark, Notify} from "quasar";
 import {api} from "boot/axios";
 import {useRouter} from "vue-router";
-const STRIPE_KEY = process.env.VUE_STRIPE_PUBLISHABLE_KEY;
+const STRIPE_KEY = process.env.VUE_APP_STRIPE_PUBLISHABLE_KEY;
 
 export default defineComponent({
   name: "CheckoutComponent",

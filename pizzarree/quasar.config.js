@@ -11,7 +11,7 @@
 
 const ESLintPlugin = require('eslint-webpack-plugin')
 const fs = require("fs");
-
+require('dotenv').config();
 
 const { configure } = require('quasar/wrappers');
 
@@ -70,11 +70,10 @@ module.exports = configure(function (ctx) {
       // gzip: true,
       // analyze: true,
   env: {
-        //TODO:load it from env
-        VUE_APP_NAME: "Pizzarree Shop",
-        VUE_APP_API_BASE_URL: "https://localhost:8000/",
-        VUE_ENCRYPTION_KEY:"KvmTy6EXQjLJsJAVW0IlO+ns7wpZBea+PDI2vV7421Y=",
-        VUE_STRIPE_PUBLISHABLE_KEY:"pk_test_RUZqAN8CkTK39VGr7FuIxPWE",
+        VUE_APP_NAME: process.env.VUE_APP_NAME,
+        VUE_APP_API_BASE_URL: process.env.VUE_APP_API_BASE_URL,
+        VUE_APP_ENCRYPTION_KEY: process.env.VUE_APP_ENCRYPTION_KEY,
+        VUE_APP_STRIPE_PUBLISHABLE_KEY: process.env.VUE_APP_STRIPE_PUBLISHABLE_KEY,
 
       },
       // Options below are automatically set depending on the env, set them if you want to override

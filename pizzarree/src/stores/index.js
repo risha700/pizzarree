@@ -5,7 +5,7 @@ import SecureLS from "secure-ls";
 import {markRaw} from "vue";
 import router from "src/router";
 
-let ENCRYPTION_KEY = process.env.VUE_ENCRYPTION_KEY;
+let ENCRYPTION_KEY = process.env.VUE_APP_ENCRYPTION_KEY;
 
 const ls = new SecureLS({
   encodingType: "aes",
