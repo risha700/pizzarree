@@ -34,6 +34,7 @@ export const useShopStore = defineStore("shop", {
       return state.cart
     },
     hasCurrentPendingOrder:(state)=>{
+      // TODO: add  condition on user email
       return Object.keys(state.order).length > 0 && Object.hasOwnProperty(state.order, 'id') ;
     },
     AuthUser: (state)=>{
@@ -146,7 +147,7 @@ export const useShopStore = defineStore("shop", {
    },
    async setupCustomerOrderEmail(){
       if(this.AuthUser.isAuthenticated){
-        this.customer_email = this.AuthUser.email;
+        this.customer_email = this.AuthUser.authUser.email;
       }
       else if(this.customer_email == null){
           // Todo: make it more unique

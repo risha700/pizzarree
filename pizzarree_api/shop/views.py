@@ -162,7 +162,6 @@ class PaymentViewSet(PaymentGateway, ViewSet):
     permission_classes = [IsAdminUser]
     allow_stripe_headers = {
         'X-Frame-Options': 'ALLOW-FROM https://*.stripe.com'
-
     }
 
     # TODO: refactor to limit perm class hasActiveCart
@@ -177,8 +176,8 @@ class PaymentViewSet(PaymentGateway, ViewSet):
         except stripe.error.StripeError as e:
             if hasattr(e.error, 'payment_intent'):
                 intent = e.error.payment_intent
-            clt_secret = intent.client_secret if intent and intent.client_secret else None
-            # raise NotAcceptable(detail=e.user_message, code=e.code)
+                # raise NotAcceptable(detail=e.user_message, code=e.code)
+            clt_secret = intent.client_secret or e.error.payment_intent.client_secret
             return Response(data={'error': e.user_message, 'client_secret': clt_secret},
                             headers=self.allow_stripe_headers)
 
@@ -187,9 +186,7 @@ class PaymentViewSet(PaymentGateway, ViewSet):
             request.session.flush()
             # if coupon used invalidate it
             # cleanup server session
-
-            # headers = {'X-Frame-Options': 'ALLOW-FROM https://*.stripe.com'}
-            #TODO: send email to user to
+            # TODO: send email to user to
         return Response(
             data={'intent_status': intent.status, 'client_secret': intent.client_secret},
             headers=self.allow_stripe_headers)

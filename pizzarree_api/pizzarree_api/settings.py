@@ -14,9 +14,7 @@ import secrets
 import sys
 from ast import literal_eval
 from pathlib import Path
-from dotenv import load_dotenv
 
-load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 PROJECT_NAME = os.getenv('DJANGO_PROJECT_NAME', 'Pizzarree Shop')
 BASE_DIR = Path(__file__).resolve().parent
@@ -118,21 +116,24 @@ WSGI_APPLICATION = 'pizzarree_api.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # },
-    'default': {
-        "ENGINE": "django.db.backends.postgresql",
-        'NAME': os.getenv('DJANGO_DB_NAME', 'pizzarree_db'),
-        'USER': os.getenv('DJANGO_DB_USER', 'pizzarree'),
-        'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'pizzarree_pass'),
-        'HOST': os.getenv('POSTGRES_HOST', 'pizzarree_db'),
-        'PORT': os.getenv('POSTGRES_PORT', 5432),
+if TESTING:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        },
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            "ENGINE": "django.db.backends.postgresql",
+            'NAME': os.getenv('DJANGO_DATABASE_NAME', 'pizzarree_db'),
+            'USER': os.getenv('DJANGO_DATABASE_USER', 'pizzarree'),
+            'PASSWORD': os.getenv('DJANGO_DATABASE_PASSWORD', 'pizzarree_pass'),
+            'HOST': os.getenv('DJANGO_DATABASE_HOST', 'pizzarree_db'),
+            'PORT': os.getenv('DJANGO_DATABASE_PORT', 5432),
+        }
+    }
 
 AUTHENTICATION_BACKENDS = [
     'accounts.authentication.EmailAuthBackend',
@@ -176,7 +177,7 @@ CORS_ALLOW_HEADERS = (
 )
 # CORS_ALLOWED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', "http://localhost:8080").split(',')
 # CORS_ALLOWED_ORIGIN_REGEXES = [fr"{os.environ.get('DJANGO_CORS_ALLOWED_ORIGIN_REGEXES', None)}"]
-CSRF_TRUSTED_ORIGINS =os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', "http://localhost:8080").split(',')
+CSRF_TRUSTED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', "http://localhost:8080").split(',')
 CORS_ALLOW_CREDENTIALS = True
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -224,5 +225,5 @@ REST_FRAMEWORK = {
 }
 CART_SESSION_ID = 'cart'
 
-STRIPE_API_KEY = os.getenv('DJANGO_STRIPE_API_KEY', '')
-STRIPE_API_SECRET = os.getenv('DJANGO_STRIPE_API_SECRET', '')
+STRIPE_API_KEY = os.getenv('DJANGO_STRIPE_API_SECRET', '')
+STRIPE_PUBLISHABLE_KEY = os.getenv('DJANGO_STRIPE_PUBLISHABLE_KEY', '')

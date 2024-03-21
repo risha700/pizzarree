@@ -1,19 +1,18 @@
 import sys
 from decimal import Decimal
 
-
 from django.conf import settings
+import stripe
+
 from django.contrib.sites.shortcuts import get_current_site
 from django.dispatch import Signal
 from django.shortcuts import render
 from rest_framework.response import Response
 from shop.models import UserVault, PaymentLog
-import stripe
 
 payment_received = Signal()
 
-
-stripe.api_key = settings.STRIPE_API_SECRET
+stripe.api_key = settings.STRIPE_API_KEY
 
 
 class PaymentGateway:
@@ -22,26 +21,15 @@ class PaymentGateway:
         super(PaymentGateway, self).__init__(*args, **kwargs)
 
     def process_payment(self, request, order):
-        customer_id = None
-        if not request.user.is_anonymous:
-            """
-            we have user
-            get vault_id or create a new one
-            """
-            user_vault, _ = UserVault.objects.get_or_create(user=request.user)
-            if not user_vault.vault_id:
-                """"""
-                new_customer = self.gateway.Customer.create(email=request.user.email)
-                user_vault.vault_id = new_customer.id
-                user_vault.save()
+        customer_id = self.attach_user_vault(request)
 
-            customer_id = user_vault.vault_id
         intent = self.gateway.PaymentIntent.create(
+            return_url='https' if request.is_secure() else 'http' + '://' + get_current_site(request).domain,
             confirm=True,
-            return_url="{}://{}".format( 'https' if request.is_secure() else 'http', get_current_site(request).domain),
-            # return_url='https' if request.is_secure() else 'http' + '://' + get_current_site(request).domain,
-            amount=int(order.total_cost*100), # pennys required
-            currency="usd", # TODO: store.currency
+            # TODO: Pennies
+            amount=int(order.total_cost * 100),
+            # TODO: store.currency
+            currency="usd",
             automatic_payment_methods={"enabled": True, 'allow_redirects': 'always'},
             payment_method=str(request.data.get('paymentMethodId')),
             use_stripe_sdk=True,
@@ -50,15 +38,32 @@ class PaymentGateway:
             statement_descriptor="My Order",
             metadata={
                 'order_id': str(order.id),
-                'order_email': str(order.email)
+                'order_email': str(order.email),
             },
             # after domain verfication
             # stripe_account='{{CONNECTED_ACCOUNT_ID}}',
+            api_key=settings.STRIPE_API_SECRET
         )
         payment_log = PaymentLog.objects.create(user_id=request.user.id, order=order, amount=intent.amount,
                                                 transaction_id=intent.id, info={'type': intent.payment_method})
         payment_received.send_robust(sender=self.__class__, order=order, payment=payment_log, transaction=intent)
         return intent
+
+    def attach_user_vault(self, request, customer_id=None):
+        if not request.user.is_anonymous:
+            """
+            we have user
+            get vault_id or create a new one
+            """
+            user_vault, _ = UserVault.objects.get_or_create(user=request.user)
+            if not user_vault.vault_id:
+                """"""
+                new_customer = self.gateway.Customer.create(email=request.user.email, name=request.user.username)
+                user_vault.vault_id = new_customer.id
+                user_vault.save()
+
+            customer_id = user_vault.vault_id
+        return customer_id
 
     def create_intent(self, **kwargs):
         order_id = kwargs.get('order_id')

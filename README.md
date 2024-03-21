@@ -35,8 +35,15 @@ Fullstack pizza shop built with
 npm run test:unit
 
 # backend
-python manage.py test 
+python manage.py test
 ```
+### docker compose 
+Adjust .env from env.example 
+```
+docker compose -F docker-compse.yaml up -d 
+```
+
+
 ---
 # Class Diagram
 

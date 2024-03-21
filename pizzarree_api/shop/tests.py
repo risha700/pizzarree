@@ -11,7 +11,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 from django.test import override_settings
 
-from shop.models import Product, Coupon, Order,PaymentLog
+from shop.models import Product, Coupon, Order,PaymentLog, UserVault
 from shop.models.cart import Cart
 from shop.payment_gateway import PaymentGateway
 from shop.utils import ProductFactory, CouponFactory
@@ -345,3 +345,7 @@ class PaymentTestCase(APITestCase):
         self.assertEqual(payment_log.order.id, order_res.data.get('id'))
         self.assertTrue(payment_log.order.paid)
         self.assertTrue(payment_log.user.id, self.test_user.id)
+
+        vault = UserVault.objects.last()
+        self.assertIsNotNone(vault.id)
+        self.assertEqual(vault.user.id, self.test_user.id)

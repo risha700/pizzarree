@@ -1,21 +1,23 @@
 # build stage
-FROM debian:bookworm-slim as build-stage
+FROM node:lts-alpine3.19 as build-stage
 
 ARG TARGETOS
 ARG TARGETARCH
-RUN echo "Building for $TARGETOS/$TARGETARCH"
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y ca-certificates curl gnupg
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | sh -
-RUN apt-get install nodejs -y
-# RUN apk update --no-cache && apk add --update alpine-sdk
 
+RUN echo "Building for $TARGETOS/$TARGETARCH"
+
+RUN apk update --no-cache && apk add --update alpine-sdk
+
+VOLUME /app
 WORKDIR /app
 COPY package*.json ./
+COPY .env .
 COPY . .
-RUN npm cache clean --force
+#RUN #npm cache clean --force
 RUN npm -g install @quasar/cli@latest
+
 RUN npm install
+
 RUN quasar clean
 RUN quasar build -m pwa
 # EXPOSE 80

@@ -67,7 +67,7 @@ export default defineComponent({
         elements = await stripe.elements({
             mode: 'payment',
             amount: Math.round(order.value.total_cost?.toFixed(2)*100),
-            currency: 'usd',
+            currency: 'usd', // TODO: store currency
             paymentMethodCreation: 'manual',
             appearance:{theme:Dark.isActive?'night':'stripe'},
         });

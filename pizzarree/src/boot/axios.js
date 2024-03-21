@@ -34,11 +34,11 @@ export default boot(({ app }) => {
     config.headers.common = {
       "X-Requested-With": "XMLHttpRequest",
       "Accept": "application/json",
-      // "Content-Type": "application/json",
+      "Content-Type": "application/json",
       // "Authorization":"Token fbece30bb8de632cd7d8d4a78f68207a22453ba6",
       // Content-Language
       // Accept-Language
-      // "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": "*",
     };
     config.timeout = 60 * 1 * 1000 // 1 minute
     return config;

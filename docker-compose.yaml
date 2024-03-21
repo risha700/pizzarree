@@ -8,9 +8,9 @@ services:
       - postgres-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_HOST=pizzarree_db
-      - POSTGRES_USER=pizzarree
-      - POSTGRES_PASSWORD=pizzarree_pass
-      - POSTGRES_DB=pizzarree_db
+      - POSTGRES_USER=
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=
       - DATABASE_PORT=5432
     ports:
       - target: 5432
@@ -22,8 +22,8 @@ services:
 
   backend:
     container_name: backend
-    # build:
-      # context: ./pizzarree_api
+#    build:
+#      context: ./pizzarree_api
       # dockerfile: ./pizzarree_api/Dockerfile
     image: registry.secure-relay.online/pizzarree_api:latest
     ports:
@@ -32,48 +32,51 @@ services:
         protocol: tcp
         mode: host
     volumes:
-      # - ./pizzarree_api:/code/app # dev
-      - ./docker_data/media/:/code/app/media/
-      # - ./docker_data/db.sqlite3:/code/app/db.sqlite3
-#    command: python manage.py runserver 0.0.0.0:8000
+      # dev
+#      - ./pizzarree_api:/code/app:z
+      - ./docker_data/media/:/code/app/media/:rw
     environment:
       - DJANGO_FRONTEND_URL=localhost
       - DJANGO_ALLOWED_HOSTS=localhost,pizzarree.net,elife.mac
       - DJANGO_DEBUG=1
-      - DJANGO_DOMAIN = localhost
-      - DATABASE_USER=pizzarree
-      - DATABASE_PASSWORD=pizzarree_pass
-      - DATABASE_DB=pizzarree_db
-      - POSTGRES_HOST=pizzarree_db
-      - DJANGO_CORS_ALLOWED_ORIGINS=https://elife.mac:8080,https://localhost:8080,http://localhost:8080
+      - DJANGO_DOMAIN=localhost
+      - DJANGO_DATABASE_NAME=
+      - DJANGO_DATABASE_USER=
+      - DJANGO_DATABASE_PASSWORD=
+      - DJANGO_DATABASE_HOST=pizzarree_db
+      - DJANGO_DATABASE_PORT=5432
+      - DJANGO_CORS_ALLOWED_ORIGINS=https://elife.mac:8080,https://localhost:8080,http://localhost:8080,http://localhost:8081
       - DJANGO_EMAIL_HOST=smtp.mailtrap.io
       - DJANGO_EMAIL_PROT=2525
-      - DJANGO_EMAIL_HOST_USER=a571812ba39b6d
-      - DJANGO_EMAIL_HOST_PASSWORD=ee0e4489a103b8
-      - DJANGO_STRIPE_API_KEY=pk_test_RUZqAN8CkTK39VGr7FuIxPWE
-      - DJANGO_STRIPE_API_SECRET=sk_test_CHbkFTgQWREZlA5ff17sCy1Q
-    command: "uwsgi --https 0.0.0.0:8000,cert/server.crt,cert/server.key --wsgi-file pizzarree_api/wsgi.py --master --processes 4 --threads 2 --static-map /static=/code/app/static --static-map /media=/code/app/media --python-auto-reload=1"
-    # command: "uwsgi --http 0.0.0.0:8000 --wsgi-file pizzarree_api/wsgi.py --master --processes 4 --threads 2 --static-map /static=/code/app/static --static-map /media=/code/app/media --python-auto-reload=1"
+      - DJANGO_EMAIL_HOST_USER=
+      - DJANGO_EMAIL_HOST_PASSWORD=
+      - DJANGO_STRIPE_API_SECRET=
+      - DJANGO_STRIPE_PUBLISHABLE_KEY=
+#    command: "uwsgi --https 0.0.0.0:8000,cert/server.crt,cert/server.key --wsgi-file pizzarree_api/wsgi.py --master --processes 4 --threads 2 --static-map /static=/code/app/static --static-map /media=/code/app/media --python-auto-reload=1"
+    command: "uwsgi --http 0.0.0.0:8000 --wsgi-file pizzarree_api/wsgi.py --master --processes 4 --threads 2 --static-map /static=/code/app/static --static-map /media=/code/app/media --python-auto-reload=1"
     depends_on:
       - pizzarree_db
 
 
   frontend:
     container_name: frontend
-    # build:
-    #   context: ./pizzarree
-    image: registry.secure-relay.online/pizzarree_temp:latest
-    
-#      dockerfile: ./pizzarree/Dockerfile
+#    build:
+#      context: ./pizzarree
+#    image: registry.secure-relay.online/pizzarree_temp:latest
+#      dockerfile: ./pizzarree/Dockerfile_arm
+    image: pizzaree_local
+
     ports:
       - target: 80
         published: 8080
         protocol: tcp
         mode: host
-    env_file:
-      - ./pizzarree/.env
-    # volumes:
-    #   - ./pizzarree:/app
+#    env_file:
+#      - ./pizzarree/.env
+    environment:
+      - VUE_APP_API_BASE_URL="http://localhost:8000/"
+    volumes:
+       - ./pizzarree:/app
     # command: "quasar dev -p 80"
     # command: "quasar serve dist/pwa --https --cert cert/server.crt --key cert/server.key -p 80"
     depends_on:

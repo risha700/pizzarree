@@ -1,5 +1,9 @@
 # FROM python:3.10-slim as builder
 FROM python:3.11-alpine3.18 as builder
+ENV VENV=/opt/venv
+RUN python3 -m venv VENV
+ENV PATH="$VENV/bin:$PATH"
+
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -28,6 +32,10 @@ RUN apk del build-deps
 
 
 FROM python:3.11-alpine3.18
+ENV VENV=/opt/venv
+RUN python3 -m venv VENV
+ENV PATH="$VENV/bin:$PATH"
+
 RUN apk update && apk add libpq jpeg-dev zlib-dev libjpeg pcre-dev pcre graphviz graphviz-dev pkgconfig
 RUN mkdir -p /wheels
 RUN mkdir -p /code
@@ -39,12 +47,13 @@ COPY requirements.txt /code/
 
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /etc/mime.types /etc/mime.types 
-RUN pip install --upgrade pip setuptools wheel && pip install --no-deps --no-cache /wheels/*
+RUN pip install --upgrade pip setuptools wheel && pip install --no-input --no-deps --no-cache /wheels/*
+#RUN pip install -U python-dotenv
 COPY . /code/app/
 #COPY ./GeoLite /code/GeoLite/
 WORKDIR /code/app
 RUN python manage.py collectstatic --noinput
-# RUN python manage.py migrate
+#RUN python manage.py migrate
 # RUN python loaddata fixtures.json
 RUN addgroup --system django \
     && adduser --system --no-create-home django --ingroup django

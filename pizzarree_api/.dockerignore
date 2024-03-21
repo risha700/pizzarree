@@ -1,6 +1,8 @@
 .idea/
 .venv/
 __pycache__/
+*/__pycache__/
+*/*/__pycache__/
 models_graph.png
 media/
 db.sqlite3
