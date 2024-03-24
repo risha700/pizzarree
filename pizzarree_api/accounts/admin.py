@@ -8,6 +8,10 @@ admin.site.site_header = "Pizzarree Admin"
 admin.site.site_title = "Pizzarree Admin Portal"
 admin.site.index_title = "Welcome to Pizzarree Shop Portal"
 admin.site.register(User, UserAdmin)
+
+from django.contrib.sites.models import Site
+
+
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
     def _session_data(self, obj):

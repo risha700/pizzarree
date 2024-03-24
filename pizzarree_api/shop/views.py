@@ -175,9 +175,9 @@ class PaymentViewSet(PaymentGateway, ViewSet):
             intent = self.process_payment(request, order)
         except stripe.error.StripeError as e:
             if hasattr(e.error, 'payment_intent'):
-                intent = e.error.payment_intent
+                intent = e.error.payment_intent if e.error.payment_intent else None
                 # raise NotAcceptable(detail=e.user_message, code=e.code)
-            clt_secret = intent.client_secret or e.error.payment_intent.client_secret
+            clt_secret = intent.client_secret if intent is not None else None
             return Response(data={'error': e.user_message, 'client_secret': clt_secret},
                             headers=self.allow_stripe_headers)
 

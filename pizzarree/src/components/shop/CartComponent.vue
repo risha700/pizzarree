@@ -1,8 +1,8 @@
 <template>
 
-    <div class="flex  justify-between self-start items-start row tw-static q-layout-padding col ">
+    <div class="flex justify-between self-start items-start row tw-static q-layout-padding col ">
 
-      <q-card class=" col-xs-12 col-md-8 ">
+          <q-card class="col-xs-12" :class="isCartEmpty?'col-md-8':'col-md-8'">
         <q-card-section v-if="!isCartEmpty">
           <div v-for="(product, id) in cart" :key="id">
             <q-card-section v-for="item in product.items" :key="item" class="column items-start justify-between ">
@@ -39,13 +39,13 @@
         </q-card-section>
 
 
-        <q-card-section v-else class="flex flex-center column tw-min-h-[300px] tw-p-10">
+        <q-card-section v-else class="text-center">
           <p class="tw-text-xl">Cart is empty, awaiting your delicious choices</p>
-          <q-btn :to="{name:'Menu'}" dense color="primary">Go Shopping</q-btn>
+          <q-btn unelevated  color="primary" :to="{name:'Menu'}" label="Go Shopping" />
         </q-card-section>
       </q-card>
 
-      <q-card class="flex-container  self-start tw-sticky tw-top-20 col-xs-12 col-md-3 q-mt-xs ">
+      <q-card class="flex-container  self-start tw-sticky tw-top-20 col-xs-12 col-md-3 q-mt-xs " v-if="!isCartEmpty">
         <q-card-section class="column justify-around   tw-min-h-[300px]">
           <q-toolbar-title>Subtotal ${{cartTotal}}</q-toolbar-title>
           <CouponComponent/>

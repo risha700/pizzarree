@@ -24,7 +24,7 @@ class PaymentGateway:
         customer_id = self.attach_user_vault(request)
 
         intent = self.gateway.PaymentIntent.create(
-            return_url='https' if request.is_secure() else 'http' + '://' + get_current_site(request).domain,
+            return_url="{}://{}".format('https' if request.is_secure() else 'http', get_current_site(request).domain),
             confirm=True,
             # TODO: Pennies
             amount=int(order.total_cost * 100),
@@ -42,7 +42,7 @@ class PaymentGateway:
             },
             # after domain verfication
             # stripe_account='{{CONNECTED_ACCOUNT_ID}}',
-            api_key=settings.STRIPE_API_SECRET
+            # api_key=settings.STRIPE_API_KEY
         )
         payment_log = PaymentLog.objects.create(user_id=request.user.id, order=order, amount=intent.amount,
                                                 transaction_id=intent.id, info={'type': intent.payment_method})

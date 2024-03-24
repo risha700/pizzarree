@@ -1,36 +1,34 @@
 <template>
   <SuspenseWithErrors>
-    <div class=" ">
       <q-tabs
             v-model="tab"
-            class="tw-sticky tw-top-10 tw-z-10"
+            class="tw-sticky tw-top-12 tw-z-10"
             :class="$q.dark.isActive?'tw-bg-gray-800':'tw-bg-white'"
-            active-color="primary"
-            indicator-color="primary"
+            active-color="secondary"
+            indicator-color="secondary"
             align="justify"
             narrow-indicator
             shrink>
 
             <q-tab name="all" label="All Products" />
             <q-tab v-for="t in tab_panels" :key="t.name" :name="t.name" :label="t.label"  />
-          </q-tabs>
-          <q-tab-panels v-model="tab" animated>
-            <q-tab-panel name="all">
-                <MenuComponent v-for="t in tab_panels" :key="t.name" :products="shopStore.products[t.name]" :header_title="t.name" />
-            </q-tab-panel>
-            <q-tab-panel v-for="t in tab_panels" :key="t.name" :name="t.name">
-              <MenuComponent :products="shopStore.products[t.name]" :header_title="t.name"/>
-            </q-tab-panel>
-          </q-tab-panels>
+      </q-tabs>
+
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="all">
+            <MenuComponent v-for="t in tab_panels" :key="t.name" :products="shopStore.products[t.name]" :header_title="t.name" />
+        </q-tab-panel>
+        <q-tab-panel v-for="t in tab_panels" :key="t.name" :name="t.name">
+            <MenuComponent :products="shopStore.products[t.name]" :header_title="t.name"/>
+        </q-tab-panel>
+      </q-tab-panels>
+    </SuspenseWithErrors>
 
 
-    </div>
-  </SuspenseWithErrors>
 </template>
 
 <script>
-import {defineComponent, onMounted, ref} from 'vue'
-import MenuComponent from "components/shop/MenuComponent.vue";
+import {defineAsyncComponent, defineComponent, onMounted, ref} from 'vue'
 import SuspenseWithErrors from "components/partials/SuspenseWithErrors.vue";
 import {useShopStore} from "stores/shop";
 
@@ -43,8 +41,10 @@ const tab_panels = [
 ]
 export default defineComponent({
   name: "MenuPage",
-  components:{SuspenseWithErrors, MenuComponent},
-  async setup(){
+  components:{SuspenseWithErrors,
+    MenuComponent: defineAsyncComponent(()=> import("components/shop/MenuComponent.vue")),
+  },
+    setup(){
     const shopStore = useShopStore()
     const tab = ref("all")
     onMounted(async()=>{

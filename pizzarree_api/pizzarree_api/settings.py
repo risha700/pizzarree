@@ -14,7 +14,9 @@ import secrets
 import sys
 from ast import literal_eval
 from pathlib import Path
+from dotenv import load_dotenv
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 PROJECT_NAME = os.getenv('DJANGO_PROJECT_NAME', 'Pizzarree Shop')
 BASE_DIR = Path(__file__).resolve().parent
@@ -50,9 +52,8 @@ SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 SECURE_REFERRER_POLICY = ['same-origin']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# EMAIL_BACKEND = "django.core.mail.backendnds.console.EmailBackend"
-
+SITE_ID = 1
+ADMINS = [('Postmaster', 'postmaster@demo-shop.amdrs.link'), ]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -61,6 +62,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'taggit',
     'accounts',
     'shop',
@@ -178,6 +180,7 @@ CORS_ALLOW_HEADERS = (
 # CORS_ALLOWED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', "http://localhost:8080").split(',')
 # CORS_ALLOWED_ORIGIN_REGEXES = [fr"{os.environ.get('DJANGO_CORS_ALLOWED_ORIGIN_REGEXES', None)}"]
 CSRF_TRUSTED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', "http://localhost:8080").split(',')
+CORS_ALLOWED_ORIGINS = CSRF_TRUSTED_ORIGINS
 CORS_ALLOW_CREDENTIALS = True
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

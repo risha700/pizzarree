@@ -16,6 +16,7 @@
         :to="{ name: child.link }"
         exact
         :inset-level="1"
+        active-class="text-secondary"
       >
         <q-item-section v-if="child.icon" avatar>
           <q-icon :name="child.icon" />
@@ -30,7 +31,7 @@
     </q-expansion-item>
   </q-list>
 
-  <q-item clickable :to="{ name: link }" exact v-else>
+  <q-item clickable :to="{ name: link }" active-class="text-secondary" exact v-else>
     <q-item-section v-if="icon" avatar>
       <q-icon :name="icon" />
     </q-item-section>

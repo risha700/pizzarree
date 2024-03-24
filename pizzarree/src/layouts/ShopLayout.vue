@@ -28,7 +28,9 @@
     >
 
       <q-list padding >
-          <q-item clickable v-for="link in linksList" :key="link.title" :to="{ name: link.link }" exact  v-ripple>
+          <q-item clickable v-for="link in linksList" :key="link.title" :to="{ name: link.link }"
+                  active-class="text-secondary"
+                  exact  v-ripple>
             <q-item-section v-if="link.icon" avatar >
               <div class="tw-flex tw-flex-col tw-items-center">
                   <q-icon :name="link.icon" size="2rem" />
@@ -40,14 +42,12 @@
     </q-drawer>
      <q-footer elevated>
         <q-toolbar>
-          <q-toolbar-title>Footer</q-toolbar-title>
+          <q-toolbar-title class="text-center">All rights reserved</q-toolbar-title>
         </q-toolbar>
       </q-footer>
 
     <q-page-container>
-      <SuspenseWithErrors>
         <router-view />
-      </SuspenseWithErrors>
     </q-page-container>
   </q-layout>
 </template>
@@ -81,7 +81,7 @@ const linksList = [
 
 export default defineComponent({
   name: 'ShopLayout',
-  components:{SuspenseWithErrors, },
+  // components:{SuspenseWithErrors, },
   setup () {
     const leftDrawerOpen = ref(false)
 

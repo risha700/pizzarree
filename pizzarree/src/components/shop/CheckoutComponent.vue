@@ -1,32 +1,48 @@
 
 <template>
-  <q-page-container class="flex items-start q-pa-lg tw-gap-10">
-    <q-card class="q-pa-lg tw-flex-auto">
-      <div class="text-h6 tw-border-b-2 tw-border-dashed tw-mb-2"> Order# {{order.id}} Summary</div>
-
+  <q-page-container class="col row flex justify-evenly items-start tw-gap-10 ">
+    <q-card class="q-pa-lg col-sm-5 col-md-4 col-xs-10">
+      <q-item-label header>Order# {{order.id}} Summary</q-item-label>
       <template v-for="(product, id) in store.cart" :key="id">
         <template v-for="item in product.items" :key="item.id+id">
-            <template v-for="nestedItem in item" :key="nestedItem.id">
-              <div class="flex items-center content-between justify-between"
-                   :class="nestedItem.name === item[0].name?'tw-min-w-[300px]':'row inline wrap q-ml-lg text-italic'">
-                <div>{{nestedItem.name}}</div>
-                <div v-if="nestedItem.name === item[0].name">{{product.quantity}}x</div>
-              </div>
-            </template>
+          <q-item>
+
+            <q-item-section avatar>
+              <q-img :src="item[0].cover_image" fit="scale-down" height="4rem"/>
+            </q-item-section>
+            <q-item-section>{{item[0].name}}
+
+             <q-item-label caption  v-if="item.length>1">
+                <template v-for="nestedItem in item" :key="nestedItem.id">
+                  <div v-if="nestedItem !== item[0]">{{nestedItem.name}}</div>
+                </template>
+              </q-item-label>
+            </q-item-section>
+
+
+
+            <q-item-section side>
+              <q-item-label caption>{{product.quantity}}</q-item-label>
+            </q-item-section>
+          </q-item>
+
         </template>
       </template>
-      <div class="justify-start tw-border-solid tw-border-t-2 column tw-my-4 ">
-        <div class="text-h5 tw-text-green-400 " v-if="order.discount_value">Discounts {{order.discount_value}}</div>
-        <div class="text-h5 tw-mt-2">Total {{order.total_cost}}</div>
-      </div>
+      <q-separator spaced />
+    <div class="text-h5 tw-text-green-400 " v-if="order.discount_value">Discounts {{order.discount_value}}</div>
+    <div class="text-h5 tw-mt-2">Total {{order.total_cost}}</div>
     </q-card>
-    <q-card class="q-pa-lg tw-flex-auto">
-      <q-banner rounded v-if="errors"  class="text-white bg-red q-mb-lg">
+
+
+    <q-card class="q-pa-lg ">
+<!--      <q-item-label header>Payment</q-item-label>-->
+
+      <q-banner rounded v-if="errors"  class="bg-negative q-mb-lg">
         {{errors}}
       </q-banner>
       <q-form class="column" @submit.prevent="handleSubmit" >
         <div  ref="paymentElement"></div>
-        <q-btn type="submit" align="center" color="secondary" stretch label="Pay Now" class="q-mt-lg" :disable="processing"/>
+        <q-btn type="submit" align="center" color="accent" stretch label="Pay Now" class="q-mt-lg" :disable="processing"/>
       </q-form>
     </q-card>
 
@@ -35,7 +51,7 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, reactive, ref} from 'vue'
+import {defineComponent, onMounted, ref} from 'vue'
 import {loadStripe} from '@stripe/stripe-js';
 import {useShopStore} from "stores/shop";
 import {storeToRefs} from "pinia";
@@ -53,7 +69,10 @@ export default defineComponent({
     const errors = ref(null);
     const processing = ref(false);
     const paymentElement = ref(null);
-    const handleErrors = (err)=>errors.value = err;
+    const handleErrors = (err)=> {
+      processing.value = false;
+      errors.value = err
+    };
     let elements;
     let stripe;
 
@@ -112,7 +131,9 @@ export default defineComponent({
       }
       // process payment on the server
        await api.post(`api/v1/shop/payment/checkout/${order.value.id}/`, {paymentMethodId:paymentMethod.id})
-         .then(async (res)=> await handleServerResponse(res))
+         .then(async (res)=> {
+           await handleServerResponse(res);
+         })
          .catch((err)=>{
            return handleErrors(err.message);
          })
@@ -122,6 +143,7 @@ export default defineComponent({
 
 
     const handleServerResponse = async (response) => {
+
       if (response.data && response.data.error) {
         // Show error from server on payment form
         return handleErrors(response.data.error);
