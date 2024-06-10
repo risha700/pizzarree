@@ -55,7 +55,7 @@ def send_verification_email(request, user, token_generator=account_activation_to
     message = render_to_string(template_name, {
         'protocol': 'https' if request.is_secure() else 'http',
         'user': user,
-        'domain': current_site.domain,
+        'domain': request.headers.get("HOST", current_site.domain),
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': token_generator.make_token(user),
         'referer': base_referer

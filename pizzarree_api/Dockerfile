@@ -58,10 +58,12 @@ RUN python manage.py collectstatic --noinput
 RUN addgroup --system django \
     && adduser --system --no-create-home django --ingroup django
 
-EXPOSE 8000
+EXPOSE 8008
 
-RUN /bin/sh
+RUN chown -R django:django /code/app
+#RUN #/bin/sh
 USER django
 
-#ENTRYPOINT uwsgi --http 0.0.0.0:8000 --wsgi-file pizzarree_api/wsgi.py --master --processes 4 --threads 2 --static-map /static=/code/app/static
+CMD /bin/sh
+#ENTRYPOINT python manage.py migrate && python manage.py loaddata fixtures.json && uwsgi --https 0.0.0.0:8000,cert/server.crt,cert/server.key --wsgi-file pizzarree_api/wsgi.py --master --processes 2 --threads 2 --static-map /static=/code/app/static --static-map /media=/code/app/media --check-static=/code/app/dist --python-auto-reload=1
 #ENTRYPOINT uwsgi --https 0.0.0.0:8000,cert/server.crt,cert/server.key --wsgi-file pizzarree_api/wsgi.py --master --processes 4 --threads 2 --static-map /static=/code/app/static

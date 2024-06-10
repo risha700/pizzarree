@@ -1,10 +1,217 @@
 [
 {
   "model": "sessions.session",
+  "pk": "0difrg0hl5glpisnun67aedmf5xabxmk",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fSwib3JkZXJfaWQiOjR9:1sGDR1:HMq1EBoR7CRzNRA0jiub6Ggygys6z9nJxchJklIx0Z8",
+    "expire_date": "2024-06-23T07:57:51.144Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "18b09tz5nq2p9503bxrguwn84p405l47",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fSwib3JkZXJfaWQiOjN9:1sGDPI:BiSowSi8t7sPeMxuutJcT5AN8BkIxTQNF1qhL9BVAtY",
+    "expire_date": "2024-06-23T07:56:04.926Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "3lh3gokhkugv01fctqagpb5lub1eq7ud",
+  "fields": {
+    "session_data": ".eJyrVkpOLCpRsqpWMjQFkYWliXklmSWVSlaGOkoFRZnJqUpWSoZGepaWSrU6SiY4lcBUGBngVGKsZwpWYojPFAugktpaABL6LAc:1sGDOx:kPvpg6_sZHbdDaOsh3bd8AnjyvwOgk1H0gBDlpat6jQ",
+    "expire_date": "2024-06-23T07:55:43.452Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "5krpa4fxy1dn4d0p7fn1cethiabao09w",
+  "fields": {
+    "session_data": ".eJyrVkpOLCpRsqpWMjQFkYWliXklmSWVSlaGOkoFRZnJqUpWSoZGepaWSrU6SiY4lcBUGBngVGKsZwpWYohmihGyKRYQJTgNsYDZg1OFGVQFbu8YQ1UYmuNRAnJIbS0AKVRTnw:1sGDR1:ZN90kD_klT5q-uSzB4APVpV6f5nHW7BTFys5UmCOKA8",
+    "expire_date": "2024-06-23T07:57:51.130Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "5ry437j1314vbqdmmdcvd8hqayyuv5a8",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fSwib3JkZXJfaWQiOjJ9:1sGDOx:5eIGRwd58QSJvdy63o3Ut-mOquxhXJp0mMxN1yaAeAs",
+    "expire_date": "2024-06-23T07:55:43.470Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "6wf2fwpdqbszz43nx4na0bgw1bt3979r",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7IjkiOnsicXVhbnRpdHkiOjEsInByaWNlIjoiMi41OSJ9fX0:1sGDUn:sDhBJXd54IRiXfaRNdNduyEfB3B7QemNXEXFOjh5zPo",
+    "expire_date": "2024-06-23T08:01:45.342Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "7g1vfii1z0r1fbbk1rorwhi3rufqgju6",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fSwib3JkZXJfaWQiOjd9:1sGDtc:tR_Rnm5p3M-Ukzq1h2F3jWWjQn-jIQZHa9CwzcOfkAY",
+    "expire_date": "2024-06-23T08:27:24.944Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "928ymdjck1g9iao22lxfq52zmwn53x55",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fX0:1sGDOx:SrjMyyt_eMVloLcGqfRZ7hekFd0KsOhoUtnNLJt_LVc",
+    "expire_date": "2024-06-23T07:55:43.431Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "b4jmudhyzvffdvv5f7ep80mgjdkouvyv",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fX0:1sGDR1:DTSo3MuRFNXgHe1guYUVznnFDcY5NPfA7DL5rrn53to",
+    "expire_date": "2024-06-23T07:57:51.114Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "c2mgsdfo554gg5df61s7ps1wazp84xfq",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7IjgiOnsicXVhbnRpdHkiOjEsInByaWNlIjoiNC45OSJ9fX0:1sGDXY:rGEMileNKnNtBa46l-_hUDIW90JniEyQdukG24HIxIw",
+    "expire_date": "2024-06-23T08:04:36.927Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ck038ffh74a952024hjejz3wa26r6u6d",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fX0:1sGDUn:lpNnrdtCPN0ZO_8arWC8kXZTjagCtkYcvQ_QhkK0bn4",
+    "expire_date": "2024-06-23T08:01:45.333Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "er3jw4lznnssig9v2y1sjb7y2yewzfr3",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fX0:1sGDPI:MLRtyTHB5yr7_37Ej65Ekf2n6R_88XRPEP03zugfAi8",
+    "expire_date": "2024-06-23T07:56:04.893Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ffcaa6n0a5tovy7cbz9w7pn7ophw90ge",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fX0:1sGDPI:MLRtyTHB5yr7_37Ej65Ekf2n6R_88XRPEP03zugfAi8",
+    "expire_date": "2024-06-23T07:56:04.900Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "fgds364r57zqzxhtgc69flhh6kfinm5v",
+  "fields": {
+    "session_data": ".eJyrVkpOLCpRsqpWsgARhaWJeSWZJZVKVoY6SgVFmcmpSlZKJnqWlkq1OkqGpjiVGBpB1RjhVGIGU2GAU4mxninEIhOcSoz0LIBKamsBoGM15g:1sGDtc:3reCLK9keQZH7rCpMUw_3lh7y1RoCMNiaHj8uZUWqlo",
+    "expire_date": "2024-06-23T08:27:24.926Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "fje6noifzqavc8zahy4uf4rixj31fv6n",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fX0:1sGDXY:5VAVIwk9aJV30W5DdVlZZzoHiDjLiVIGfSkkokhXWbA",
+    "expire_date": "2024-06-23T08:04:36.916Z"
+  }
+},
+{
+  "model": "sessions.session",
   "pk": "hssbtjj4ivg1hug3544z9yoo5i4nk9ec",
   "fields": {
     "session_data": ".eJxVjM0OwiAQhN-Fs2mg_JT1pu_gmezCNjRGmgicjO8uTTzoaZJvvpmXCNhbDr3yM2xJnIUSp19GGO9cjgJj3HtpdTpKLm2L2La9TLehFXzwZeDr1_67yFjz2FMynoCjkiMgIRgLcrFsZjKOnJSkwRlAr3CefdLSo155XdACKZ28eH8Apm848g:1rlnaj:g4Lv5R5r7IcLn_TjMGymVhuvNvAnBWHEUOCywJVzpFs",
     "expire_date": "2024-03-31T10:18:09.860Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "i4eijbmj554xxx8a28w08cey15oui7yo",
+  "fields": {
+    "session_data": ".eJyNkFFrwyAUhf_LfQ5JmlKLedugY9AO-rCHsRcRdamLUWt0rCv579O1ZB1tYC_iOdfr_c49AqPOQ32EWZnOfaDaS3-AepaBdZIJqHGOcRKGB_bzVPJYLjPoVWigBiusFc5oCRlo2sUO2F5YzHwIR2RHm1QpOsElLYJVhvK-OP8aL7GjJw9L87h_9fm7FU1s7b1hbZpVliMNJBwYMvDGU0UuGKNXTWVAtzJUY4RPRV3EG_lfNmf9B14HpSag0C0odIJCU1BVvriGQiOU30n9i_R8Uv_b5v2abO_mX4dlS9arrpu3mKCwetuZp9zqyc0mnqsQyRyiaRxPgyMhHr4BP1C0TQ:1sGGf0:xHCoMy9MM-3XYjicWEu2xvViADOsYfPouL0ihBkq_sE",
+    "expire_date": "2024-06-23T11:24:30.626Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "it9glcva2qsc531r0vhw1knmdqj1sjk0",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fX0:1sGDtc:L8mLNm1C1HXSRNgYbopcL73j6MtkI5IHWT9wUGY-oKU",
+    "expire_date": "2024-06-23T08:27:24.913Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "jo02uyzcl5ftd2ao7yagnqehdfe6u3z1",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fX0:1sGDOx:SrjMyyt_eMVloLcGqfRZ7hekFd0KsOhoUtnNLJt_LVc",
+    "expire_date": "2024-06-23T07:55:43.440Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "k6ut6by79stuzg637era59seh40773eu",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fX0:1sGDR1:DTSo3MuRFNXgHe1guYUVznnFDcY5NPfA7DL5rrn53to",
+    "expire_date": "2024-06-23T07:57:51.104Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ki42ajxboqh5q7sjyhqpxon058fdvqdg",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fSwib3JkZXJfaWQiOjV9:1sGDUn:d7AcG56lbAiyA1Mcx7QaAK6s3P3ChAL3oRPLUQkCl_o",
+    "expire_date": "2024-06-23T08:01:45.355Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "lxfibfekh3p8j2bz1rga61v260aidqxm",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fX0:1sGDtc:L8mLNm1C1HXSRNgYbopcL73j6MtkI5IHWT9wUGY-oKU",
+    "expire_date": "2024-06-23T08:27:24.902Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "mq9odc5zhzssepbt4zq09ycrn8o7zpde",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fX0:1sGDXY:5VAVIwk9aJV30W5DdVlZZzoHiDjLiVIGfSkkokhXWbA",
+    "expire_date": "2024-06-23T08:04:36.905Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "tp2n69hzs8q8yuihy4tm2d8j17sq7trk",
+  "fields": {
+    "session_data": ".eJyrVkpOLCpRsqpWMjQFkYWliXklmSWVSlaGOkoFRZnJqUpWSoZGepaWSrU6SiY4lcBUGBngVGKsZwpWYohmihGyKRYQJTgNsYDZg1OFGVQFbu8YQ1UYmuNRAnJIbS0AKVRTnw:1sGDPI:jefn2SaEL0Efav4xG_bZuGr7KyqdVQGCdfFTaE1sy3w",
+    "expire_date": "2024-06-23T07:56:04.914Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ufjd5rmaa6duyguk4mbw5cf5qxiw7f5x",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fSwib3JkZXJfaWQiOjZ9:1sGDXY:fPL0CkKlVKYSIHTgJcKCkHRGTY98ZkQInXm6qrmiu1w",
+    "expire_date": "2024-06-23T08:04:36.945Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "v39j0qpske0y95eqeeosjpi969ef353u",
+  "fields": {
+    "session_data": "eyJjYXJ0Ijp7fX0:1sGDUn:lpNnrdtCPN0ZO_8arWC8kXZTjagCtkYcvQ_QhkK0bn4",
+    "expire_date": "2024-06-23T08:01:45.324Z"
+  }
+},
+{
+  "model": "sites.site",
+  "fields": {
+    "domain": "localhost",
+    "name": "localhost"
   }
 },
 {
@@ -338,8 +545,8 @@
 {
   "model": "accounts.user",
   "fields": {
-    "password": "pbkdf2_sha256$600000$SJd5zU1j9AwdST8APjPamR$mkT5P5YM3J/LXL5a8Vr33kpnhwAm/K2SF6w3XqVF8Tc=",
-    "last_login": "2024-03-17T10:18:09.846Z",
+    "password": "pbkdf2_sha256$600000$X4IM62zkObvA3lSyHi3lBS$NPwLFOG7J/poYQ1wyphcm7dJxGWyXzuoGpzfL5EU1OQ=",
+    "last_login": "2024-06-09T10:07:03.880Z",
     "is_superuser": true,
     "first_name": "",
     "last_name": "",
@@ -354,11 +561,44 @@
   }
 },
 {
+  "model": "accounts.user",
+  "fields": {
+    "password": "pbkdf2_sha256$600000$xFnqiEPifHCNbLkTlsBP66$wPRK0Mf2YJu4Tq8ZEPyHmAaBbdf5iHlQI7ZGnhEAxhw=",
+    "last_login": "2024-06-09T09:28:37.930Z",
+    "is_superuser": true,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2024-06-09T08:48:08.197Z",
+    "phone": "+201067577732",
+    "email": "rss@mac.local",
+    "username": "rss",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
   "model": "accounts.profile",
   "pk": 1,
   "fields": {
     "user": [
       "rs"
+    ],
+    "date_of_birth": null,
+    "photo": "",
+    "email_verified": true,
+    "phone_verified": false,
+    "temp_token": {},
+    "preference": {}
+  }
+},
+{
+  "model": "accounts.profile",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "rss"
     ],
     "date_of_birth": null,
     "photo": "",
@@ -382,7 +622,7 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T09:42:06.200Z",
-    "updated": "2024-03-17T09:42:06.200Z",
+    "updated": "2024-06-09T09:04:31.759Z",
     "cover_image": "uploads/products/margreta.jpg"
   }
 },
@@ -454,8 +694,8 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:05:01.885Z",
-    "updated": "2024-03-17T10:09:26.906Z",
-    "cover_image": "uploads/products/BK_PA3zy7k_rIwcVzx.png"
+    "updated": "2024-06-09T09:04:15.742Z",
+    "cover_image": "uploads/products/BK_PA3zy7k_KEmm3k9_cwLWYmB.png"
   }
 },
 {
@@ -472,8 +712,8 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:05:33.531Z",
-    "updated": "2024-03-17T10:08:44.025Z",
-    "cover_image": "uploads/products/BK_PA3zy7k.png"
+    "updated": "2024-06-09T09:04:07.604Z",
+    "cover_image": "uploads/products/BK_PA3zy7k_KEmm3k9_6uEfhoM.png"
   }
 },
 {
@@ -490,8 +730,8 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:06:17.858Z",
-    "updated": "2024-03-17T10:09:37.908Z",
-    "cover_image": "uploads/products/BK_PA3zy7k_MrBIedT.png"
+    "updated": "2024-06-09T09:03:58.214Z",
+    "cover_image": "uploads/products/BK_PA3zy7k.png"
   }
 },
 {
@@ -508,7 +748,7 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:07:10.750Z",
-    "updated": "2024-03-17T10:10:46.625Z",
+    "updated": "2024-06-09T09:03:45.505Z",
     "cover_image": "uploads/products/orange.jpg"
   }
 },
@@ -526,7 +766,7 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:11:38.453Z",
-    "updated": "2024-03-17T10:11:38.453Z",
+    "updated": "2024-06-09T09:03:34.289Z",
     "cover_image": "uploads/products/water.png"
   }
 },
@@ -544,8 +784,8 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:13:58.885Z",
-    "updated": "2024-03-17T10:13:58.885Z",
-    "cover_image": "uploads/products/pepps.jpeg"
+    "updated": "2024-06-09T09:03:26.390Z",
+    "cover_image": "uploads/products/pepps_F7oHqZt.jpeg"
   }
 },
 {
@@ -562,7 +802,7 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:14:56.060Z",
-    "updated": "2024-03-17T10:14:56.060Z",
+    "updated": "2024-06-09T09:03:06.602Z",
     "cover_image": "uploads/products/P-1.png"
   }
 },
@@ -580,7 +820,7 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:15:28.340Z",
-    "updated": "2024-03-17T10:15:28.340Z",
+    "updated": "2024-06-09T09:02:58.767Z",
     "cover_image": "uploads/products/J-3.png"
   }
 },
@@ -598,7 +838,7 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:15:51.465Z",
-    "updated": "2024-03-17T10:15:51.465Z",
+    "updated": "2024-06-09T09:02:49.929Z",
     "cover_image": "uploads/products/M-1_b0jusTU.png"
   }
 },
@@ -616,8 +856,8 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:16:22.974Z",
-    "updated": "2024-03-17T10:16:22.974Z",
-    "cover_image": "uploads/products/O-1.png"
+    "updated": "2024-06-09T09:05:19.906Z",
+    "cover_image": "uploads/products/M-1_b0jusTU_3LDIZ8t.png"
   }
 },
 {
@@ -634,7 +874,7 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:22:23.266Z",
-    "updated": "2024-03-17T10:22:23.266Z",
+    "updated": "2024-06-09T09:02:10.363Z",
     "cover_image": "uploads/products/meat_lover.jpg"
   }
 },
@@ -652,7 +892,7 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:24:06.029Z",
-    "updated": "2024-03-17T10:24:06.029Z",
+    "updated": "2024-06-09T09:02:01.827Z",
     "cover_image": "uploads/products/cheesep.jpg"
   }
 },
@@ -670,7 +910,7 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:25:41.985Z",
-    "updated": "2024-03-17T10:25:41.985Z",
+    "updated": "2024-06-09T09:01:33.112Z",
     "cover_image": "uploads/products/soda.jpeg"
   }
 },
@@ -688,7 +928,7 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:27:00.055Z",
-    "updated": "2024-03-17T10:27:00.055Z",
+    "updated": "2024-06-09T09:01:24.928Z",
     "cover_image": "uploads/products/chocolate_.jpg"
   }
 },
@@ -706,7 +946,7 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:27:40.781Z",
-    "updated": "2024-03-17T10:27:40.781Z",
+    "updated": "2024-06-09T09:01:13.800Z",
     "cover_image": "uploads/products/dessert.png"
   }
 },
@@ -724,8 +964,8 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:28:11.459Z",
-    "updated": "2024-03-17T10:28:11.459Z",
-    "cover_image": "uploads/products/BK_PA3zy7k_diRlZ2Z.png"
+    "updated": "2024-06-09T09:01:04.607Z",
+    "cover_image": "uploads/products/BK_PA3zy7k_KEmm3k9.png"
   }
 },
 {
@@ -742,8 +982,8 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:28:52.648Z",
-    "updated": "2024-03-17T10:30:21.795Z",
-    "cover_image": "uploads/products/chicken_9EfLb8J.png"
+    "updated": "2024-06-09T09:00:49.735Z",
+    "cover_image": "uploads/products/chicken.png"
   }
 },
 {
@@ -760,8 +1000,8 @@
     "featured": false,
     "info": {},
     "created": "2024-03-17T10:29:32.405Z",
-    "updated": "2024-03-17T10:29:32.405Z",
-    "cover_image": "uploads/products/loadedtots_svPYn3K.png"
+    "updated": "2024-06-09T08:56:53.297Z",
+    "cover_image": "uploads/products/loadedtots.png"
   }
 },
 {
@@ -773,6 +1013,176 @@
     "phone": null,
     "created": "2024-03-17T10:17:37.433Z",
     "updated": "2024-03-17T10:17:53.939Z",
+    "paid": true,
+    "payment_method": null,
+    "status": "('COMPLETED', 'completed')",
+    "coupon": null,
+    "billing_address": null,
+    "shipping_address": null
+  }
+},
+{
+  "model": "shop.order",
+  "pk": 2,
+  "fields": {
+    "identifier": "8f573a77-9b8d-47a3-906b-07a059608a10",
+    "email": "1717919698931_guest@test.net",
+    "phone": null,
+    "created": "2024-06-09T07:55:43.462Z",
+    "updated": "2024-06-09T07:55:43.462Z",
+    "paid": false,
+    "payment_method": null,
+    "status": "('PENDING', 'pending')",
+    "coupon": null,
+    "billing_address": null,
+    "shipping_address": null
+  }
+},
+{
+  "model": "shop.order",
+  "pk": 3,
+  "fields": {
+    "identifier": "1b16af5a-12dd-475b-b908-accb63407e5c",
+    "email": "1717919698931_guest@test.net",
+    "phone": null,
+    "created": "2024-06-09T07:56:04.921Z",
+    "updated": "2024-06-09T07:56:04.921Z",
+    "paid": false,
+    "payment_method": null,
+    "status": "('PENDING', 'pending')",
+    "coupon": null,
+    "billing_address": null,
+    "shipping_address": null
+  }
+},
+{
+  "model": "shop.order",
+  "pk": 4,
+  "fields": {
+    "identifier": "07aa1b43-7873-431e-8cb7-779767cb9b1a",
+    "email": "1717919698931_guest@test.net",
+    "phone": null,
+    "created": "2024-06-09T07:57:51.138Z",
+    "updated": "2024-06-09T07:57:51.138Z",
+    "paid": false,
+    "payment_method": null,
+    "status": "('PENDING', 'pending')",
+    "coupon": null,
+    "billing_address": null,
+    "shipping_address": null
+  }
+},
+{
+  "model": "shop.order",
+  "pk": 5,
+  "fields": {
+    "identifier": "2c19bfe1-5101-4a71-b2ad-964836944219",
+    "email": "1717920061949_guest@test.net",
+    "phone": null,
+    "created": "2024-06-09T08:01:45.350Z",
+    "updated": "2024-06-09T08:01:45.350Z",
+    "paid": false,
+    "payment_method": null,
+    "status": "('PENDING', 'pending')",
+    "coupon": null,
+    "billing_address": null,
+    "shipping_address": null
+  }
+},
+{
+  "model": "shop.order",
+  "pk": 6,
+  "fields": {
+    "identifier": "8f1da7c9-a350-4a17-8c79-e88ec435628a",
+    "email": "1717920269280_guest@test.net",
+    "phone": null,
+    "created": "2024-06-09T08:04:36.938Z",
+    "updated": "2024-06-09T08:04:36.938Z",
+    "paid": false,
+    "payment_method": null,
+    "status": "('PENDING', 'pending')",
+    "coupon": null,
+    "billing_address": null,
+    "shipping_address": null
+  }
+},
+{
+  "model": "shop.order",
+  "pk": 7,
+  "fields": {
+    "identifier": "1eee68e5-65dc-4fa3-8e6c-b077dac78a88",
+    "email": "1717920269280_guest@test.net",
+    "phone": null,
+    "created": "2024-06-09T08:27:24.937Z",
+    "updated": "2024-06-09T08:27:24.937Z",
+    "paid": false,
+    "payment_method": null,
+    "status": "('PENDING', 'pending')",
+    "coupon": null,
+    "billing_address": null,
+    "shipping_address": null
+  }
+},
+{
+  "model": "shop.order",
+  "pk": 8,
+  "fields": {
+    "identifier": "1a589dd3-2e57-43f2-b05b-4c120f35da7d",
+    "email": "1717923423695_guest@test.net",
+    "phone": null,
+    "created": "2024-06-09T09:05:32.806Z",
+    "updated": "2024-06-09T09:05:52.202Z",
+    "paid": true,
+    "payment_method": null,
+    "status": "('COMPLETED', 'completed')",
+    "coupon": null,
+    "billing_address": null,
+    "shipping_address": null
+  }
+},
+{
+  "model": "shop.order",
+  "pk": 9,
+  "fields": {
+    "identifier": "0c57b6e2-ba95-48aa-9591-6426636fce70",
+    "email": "1717932253449_guest@test.net",
+    "phone": null,
+    "created": "2024-06-09T11:24:30.605Z",
+    "updated": "2024-06-09T11:24:30.605Z",
+    "paid": false,
+    "payment_method": null,
+    "status": "('PENDING', 'pending')",
+    "coupon": null,
+    "billing_address": null,
+    "shipping_address": null
+  }
+},
+{
+  "model": "shop.order",
+  "pk": 10,
+  "fields": {
+    "identifier": "2f5984d3-522b-49bb-a57d-8be34ae63a39",
+    "email": "1717932979147_guest@test.net",
+    "phone": null,
+    "created": "2024-06-09T11:36:27.496Z",
+    "updated": "2024-06-09T11:38:01.236Z",
+    "paid": false,
+    "payment_method": null,
+    "status": "('PENDING', 'pending')",
+    "coupon": null,
+    "billing_address": null,
+    "shipping_address": null
+  }
+},
+{
+  "model": "shop.order",
+  "pk": 11,
+  "fields": {
+    "identifier": "6e68db70-47fb-4fe2-a917-a13463dd7a0e",
+    "email": "1717932979147_guest@test.net",
+    "phone": null,
+    "created": "2024-06-09T11:44:08.298Z",
+    "updated": "2024-06-09T11:44:18.075Z",
     "paid": true,
     "payment_method": null,
     "status": "('COMPLETED', 'completed')",
@@ -832,6 +1242,196 @@
   }
 },
 {
+  "model": "shop.orderitem",
+  "pk": 6,
+  "fields": {
+    "order": 8,
+    "product": 15,
+    "price": "12.99",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 7,
+  "fields": {
+    "order": 8,
+    "product": 3,
+    "price": "4.99",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 8,
+  "fields": {
+    "order": 8,
+    "product": 20,
+    "price": "3.59",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 9,
+  "fields": {
+    "order": 8,
+    "product": 14,
+    "price": "2.89",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 10,
+  "fields": {
+    "order": 9,
+    "product": 10,
+    "price": "9.99",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 11,
+  "fields": {
+    "order": 9,
+    "product": 2,
+    "price": "6.99",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 12,
+  "fields": {
+    "order": 9,
+    "product": 6,
+    "price": "2.59",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 16,
+  "fields": {
+    "order": 10,
+    "product": 16,
+    "price": "16.99",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 17,
+  "fields": {
+    "order": 10,
+    "product": 3,
+    "price": "4.99",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 18,
+  "fields": {
+    "order": 10,
+    "product": 20,
+    "price": "3.59",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 19,
+  "fields": {
+    "order": 10,
+    "product": 9,
+    "price": "2.59",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 20,
+  "fields": {
+    "order": 10,
+    "product": 8,
+    "price": "4.99",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 21,
+  "fields": {
+    "order": 11,
+    "product": 16,
+    "price": "16.99",
+    "quantity": 2
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 22,
+  "fields": {
+    "order": 11,
+    "product": 3,
+    "price": "4.99",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 23,
+  "fields": {
+    "order": 11,
+    "product": 20,
+    "price": "3.59",
+    "quantity": 2
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 24,
+  "fields": {
+    "order": 11,
+    "product": 9,
+    "price": "2.59",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 25,
+  "fields": {
+    "order": 11,
+    "product": 8,
+    "price": "4.99",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 26,
+  "fields": {
+    "order": 11,
+    "product": 4,
+    "price": "2.99",
+    "quantity": 1
+  }
+},
+{
+  "model": "shop.orderitem",
+  "pk": 27,
+  "fields": {
+    "order": 11,
+    "product": 13,
+    "price": "2.99",
+    "quantity": 1
+  }
+},
+{
   "model": "shop.coupon",
   "pk": 1,
   "fields": {
@@ -868,6 +1468,16 @@
   }
 },
 {
+  "model": "shop.uservault",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "rs"
+    ],
+    "vault_id": "cus_QGGh2AhF3oYlHd"
+  }
+},
+{
   "model": "shop.paymentlog",
   "pk": 1,
   "fields": {
@@ -879,6 +1489,46 @@
     "info": {
       "type": "pm_1OvGmpBqjEbuVznCFIiHq6Hw"
     }
+  }
+},
+{
+  "model": "shop.paymentlog",
+  "pk": 2,
+  "fields": {
+    "user": null,
+    "order": 8,
+    "amount": "2446.00",
+    "timestamp": "2024-06-09T09:05:52.199Z",
+    "transaction_id": "pi_3PPhhDBqjEbuVznC2odNXZSg",
+    "info": {
+      "type": "pm_1PPhhCBqjEbuVznCW5xEJaCr"
+    }
+  }
+},
+{
+  "model": "shop.paymentlog",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "rs"
+    ],
+    "order": 11,
+    "amount": "5971.00",
+    "timestamp": "2024-06-09T11:44:18.070Z",
+    "transaction_id": "pi_3PPkAWBqjEbuVznC1k4E4BDc",
+    "info": {
+      "type": "pm_1PPkAVBqjEbuVznCNBLPgX0B"
+    }
+  }
+},
+{
+  "model": "authtoken.token",
+  "pk": "8882d37ef3b527d4ea3fd0de5cd66be94974a72e",
+  "fields": {
+    "user": [
+      "rs"
+    ],
+    "created": "2024-06-09T09:30:22.348Z"
   }
 },
 {
@@ -1191,7 +1841,7 @@
   "model": "admin.logentry",
   "pk": 18,
   "fields": {
-    "action_time": "2024-03-17T10:16:23.000Z",
+    "action_time": "2024-03-17T10:16:23Z",
     "user": [
       "rs"
     ],
@@ -1455,6 +2105,510 @@
     "object_repr": " #21 - chicken-bites",
     "action_flag": 2,
     "change_message": "[{\"changed\": {\"fields\": [\"Tags\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 33,
+  "fields": {
+    "action_time": "2024-06-09T08:53:53.837Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "22",
+    "object_repr": " #22 - shrimp-popcorn",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 34,
+  "fields": {
+    "action_time": "2024-06-09T08:56:53.301Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "22",
+    "object_repr": " #22 - shrimp-popcorn",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 35,
+  "fields": {
+    "action_time": "2024-06-09T09:00:49.739Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "21",
+    "object_repr": " #21 - chicken-bites",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 36,
+  "fields": {
+    "action_time": "2024-06-09T09:01:04.611Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "20",
+    "object_repr": " #20 - brooklyn-crust",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 37,
+  "fields": {
+    "action_time": "2024-06-09T09:01:13.804Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "19",
+    "object_repr": " #19 - lava-cake",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 38,
+  "fields": {
+    "action_time": "2024-06-09T09:01:24.932Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "18",
+    "object_repr": " #18 - chocolate-mousse",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 39,
+  "fields": {
+    "action_time": "2024-06-09T09:01:33.116Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "17",
+    "object_repr": " #17 - soda",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 40,
+  "fields": {
+    "action_time": "2024-06-09T09:02:01.833Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "16",
+    "object_repr": " #16 - four-seasons",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 41,
+  "fields": {
+    "action_time": "2024-06-09T09:02:10.367Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "15",
+    "object_repr": " #15 - all-the-meats",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 42,
+  "fields": {
+    "action_time": "2024-06-09T09:02:29.624Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "14",
+    "object_repr": " #14 - cheddar-pizza",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 43,
+  "fields": {
+    "action_time": "2024-06-09T09:02:49.933Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "13",
+    "object_repr": " #13 - mushrooms",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 44,
+  "fields": {
+    "action_time": "2024-06-09T09:02:58.771Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "12",
+    "object_repr": " #12 - jalapenos",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 45,
+  "fields": {
+    "action_time": "2024-06-09T09:03:06.606Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "11",
+    "object_repr": " #11 - pepperonis",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 46,
+  "fields": {
+    "action_time": "2024-06-09T09:03:26.394Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "10",
+    "object_repr": " #10 - pepperoni",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 47,
+  "fields": {
+    "action_time": "2024-06-09T09:03:34.293Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "9",
+    "object_repr": " #9 - water",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 48,
+  "fields": {
+    "action_time": "2024-06-09T09:03:45.509Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "8",
+    "object_repr": " #8 - orange-juice",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 49,
+  "fields": {
+    "action_time": "2024-06-09T09:03:58.218Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "7",
+    "object_repr": " #7 - cheese-stuffed",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 50,
+  "fields": {
+    "action_time": "2024-06-09T09:04:07.608Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "6",
+    "object_repr": " #6 - thin",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 51,
+  "fields": {
+    "action_time": "2024-06-09T09:04:15.746Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "5",
+    "object_repr": " #5 - pan",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 52,
+  "fields": {
+    "action_time": "2024-06-09T09:04:31.763Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "1",
+    "object_repr": " #1 - pizza-margreta",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 53,
+  "fields": {
+    "action_time": "2024-06-09T09:05:19.910Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "shop",
+      "product"
+    ],
+    "object_id": "14",
+    "object_repr": " #14 - cheddar-pizza",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover_image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 54,
+  "fields": {
+    "action_time": "2024-06-09T09:09:27.588Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "accounts",
+      "user"
+    ],
+    "object_id": "3",
+    "object_repr": "ahbox",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 55,
+  "fields": {
+    "action_time": "2024-06-09T09:10:34.461Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "accounts",
+      "user"
+    ],
+    "object_id": "4",
+    "object_repr": "ahboxmail",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 56,
+  "fields": {
+    "action_time": "2024-06-09T09:14:00.978Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "accounts",
+      "user"
+    ],
+    "object_id": "5",
+    "object_repr": "ahbox",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 57,
+  "fields": {
+    "action_time": "2024-06-09T09:19:31.549Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "accounts",
+      "user"
+    ],
+    "object_id": "6",
+    "object_repr": "ahbox",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 58,
+  "fields": {
+    "action_time": "2024-06-09T09:21:58.161Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "accounts",
+      "user"
+    ],
+    "object_id": "7",
+    "object_repr": "ahbox",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 59,
+  "fields": {
+    "action_time": "2024-06-09T09:28:43.272Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "accounts",
+      "user"
+    ],
+    "object_id": "8",
+    "object_repr": "ahbox",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 60,
+  "fields": {
+    "action_time": "2024-06-09T09:29:53.044Z",
+    "user": [
+      "rss"
+    ],
+    "content_type": [
+      "sites",
+      "site"
+    ],
+    "object_id": "1",
+    "object_repr": "localhost",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Domain name\", \"Display name\"]}}]"
   }
 }
 ]

@@ -69,7 +69,7 @@ class Cart(object):
         if product_id not in self.cart:
             self.cart[product_id] = {'quantity': quantity, 'price': str(product.price)}
         else:
-            real_qty = int(quantity) + int(self.cart[str(product.id)].get('quantity',0))
+            real_qty = int(quantity) + int(self.cart[str(product.id)].get('quantity', 0))
             self.verify_stock_level(product, real_qty)
             if update_quantity:
                 real_qty = quantity

@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 PROJECT_NAME = os.getenv('DJANGO_PROJECT_NAME', 'Pizzarree Shop')
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 TESTING = sys.argv[1:2] == ['test']
 FRONTEND_URL = os.getenv('DJANGO_FRONTEND_URL', 'https://pizzarree.net')
 API_WEBHOOK_REDIRECT_EXTENSION = os.getenv('DJANGO_API_WEBHOOK_REDIRECT_EXTENSION', 'done')
@@ -30,20 +30,25 @@ ADMIN_SITE_PATH = os.getenv('DJANGO_ADMIN_SITE_PATH', 'admin')
 SUPPORT_MAIL = "support@pizzarree.net"
 AUTH_USER_MODEL = "accounts.User"
 
-DEFAULT_FROM_EMAIL = "postmaster@pizzarree.test"
+DEFAULT_FROM_EMAIL = "postmaster@amdrs.link"
 
 DOMAIN = os.getenv('DJANGO_DOMAIN', 'pizzarree.net')
 TRUSTED_HOSTS = ['.%s' % DOMAIN, DOMAIN, 'localhost', '127.0.0.1', 'web']
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',') if os.getenv('DJANGO_ALLOWED_HOSTS') else TRUSTED_HOSTS
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST', 'smtp.mailtrap.io')
-EMAIL_PORT = os.getenv('DJANGO_EMAIL_PORT', '2525')
-EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_HOST_USER', 'd8085a33ba56ab')
-EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_HOST_PASSWORD', 'fd21ce88840f38')
-EMAIL_USE_TLS = bool(literal_eval(os.getenv('DJANGO_EMAIL_USE_TLS', '0')))
-EMAIL_USE_SSL = bool(literal_eval(os.getenv('DJANGO_EMAIL_USE_SSL', '0')))
+
 FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o755
 FILE_UPLOAD_PERMISSIONS = 0o644
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST', 'smtp.mailtrap.io')
+EMAIL_PORT = os.getenv('DJANGO_EMAIL_PORT', '587')
+EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_HOST_USER', 'a571812ba39b6d')
+EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_HOST_PASSWORD', 'ee0e4489a103b8')
+
+
+# EMAIL_USE_TLS = bool(literal_eval(os.getenv('DJANGO_EMAIL_USE_TLS', '0')))
+# EMAIL_USE_SSL = bool(literal_eval(os.getenv('DJANGO_EMAIL_USE_SSL', '0')))
+
 SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
 SECURE_HSTS_PRELOAD = not DEBUG
 SECURE_HSTS_SECONDS = 3600 # restrict access only via https
@@ -53,7 +58,7 @@ CSRF_COOKIE_SECURE = not DEBUG
 SECURE_REFERRER_POLICY = ['same-origin']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SITE_ID = 1
-ADMINS = [('Postmaster', 'postmaster@demo-shop.amdrs.link'), ]
+ADMINS = [('Postmaster', 'ahbox@outlook.com'), ]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -75,20 +80,20 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+APPEND_SLASH = True
 ROOT_URLCONF = 'pizzarree_api.urls'
 STATIC_URL = '/static/' #alias for static_root
 # STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static_src")
+#     os.path.join(BASE_DIR, "dist")
 # ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
@@ -100,7 +105,7 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [TEMPLATES_DIR, os.path.join(BASE_DIR, 'dist')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,24 +123,24 @@ WSGI_APPLICATION = 'pizzarree_api.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-if TESTING:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        },
-    }
-else:
-    DATABASES = {
-        'default': {
-            "ENGINE": "django.db.backends.postgresql",
-            'NAME': os.getenv('DJANGO_DATABASE_NAME', 'pizzarree_db'),
-            'USER': os.getenv('DJANGO_DATABASE_USER', 'pizzarree'),
-            'PASSWORD': os.getenv('DJANGO_DATABASE_PASSWORD', 'pizzarree_pass'),
-            'HOST': os.getenv('DJANGO_DATABASE_HOST', 'pizzarree_db'),
-            'PORT': os.getenv('DJANGO_DATABASE_PORT', 5432),
-        }
-    }
+# if TESTING:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3/db.sqlite3',
+    },
+}
+# else:
+#     DATABASES = {
+#         'default': {
+#             "ENGINE": "django.db.backends.postgresql",
+#             'NAME': os.getenv('DJANGO_DATABASE_NAME', 'pizzarree_db'),
+#             'USER': os.getenv('DJANGO_DATABASE_USER', 'pizzarree'),
+#             'PASSWORD': os.getenv('DJANGO_DATABASE_PASSWORD', 'pizzarree_pass'),
+#             'HOST': os.getenv('DJANGO_DATABASE_HOST', 'pizzarree_db'),
+#             'PORT': os.getenv('DJANGO_DATABASE_PORT', 5432),
+#         }
+#     }
 
 AUTHENTICATION_BACKENDS = [
     'accounts.authentication.EmailAuthBackend',
@@ -161,7 +166,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOW_HEADERS = (
     'accept',
     'accept-encoding',
@@ -177,11 +181,14 @@ CORS_ALLOW_HEADERS = (
     'access-control-allow-credentials',
 
 )
-# CORS_ALLOWED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', "http://localhost:8080").split(',')
-# CORS_ALLOWED_ORIGIN_REGEXES = [fr"{os.environ.get('DJANGO_CORS_ALLOWED_ORIGIN_REGEXES', None)}"]
-CSRF_TRUSTED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', "http://localhost:8080").split(',')
-CORS_ALLOWED_ORIGINS = CSRF_TRUSTED_ORIGINS
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = DEBUG
+
+# CORS_ALLOWED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', "http://localhost:8080").split(',')
+# CORS_ALLOWED_ORIGIN_REGEXES = [fr"{os.environ.get('DJANGO_CORS_ALLOWED_ORIGIN_REGEXES', '*')}"]
+
+CSRF_TRUSTED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', "http://localhost:8080,https://localhost:8000").split(',')
+CORS_ALLOWED_ORIGINS = CSRF_TRUSTED_ORIGINS
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -197,11 +204,6 @@ GRAPH_MODELS = {
   'all_applications': True,
   'group_models': True,
 }
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
