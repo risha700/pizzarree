@@ -61,8 +61,9 @@
             <q-card-section>
               <div v-for="item in myPizza" :key="item">
                 <span v-if="item?.id">
-                  <span v-text="item.name"></span>
-                  <q-btn flat dense stack icon="remove" @click="clearTopping(item.name)" v-if="item.tags.includes('topping')"/>
+                  <span v-text="item?.name"></span>
+                  <q-btn flat dense stack icon="remove" @click.prevent="clearTopping(item?.name)" v-if="item?.tags?.includes('topping')"/>
+
                 </span>
               </div>
             </q-card-section>
@@ -122,18 +123,15 @@ export default defineComponent({
     let myPizza = ref([]);
     let currentPassedProduct = ref({});
     let currentPassedId = ref(null);
-    const updateProductInCart = ()=>{
-
-    }
     const handleModelChanged = (v)=>{
       emit('hideModal', v);
       //reset mypiuzza
     }
     function clearTopping(topping){
-      let t_id = selectedToppings.value.findIndex((x)=>x.name==topping)
-      selectedToppings.value.splice(t_id, 1)
-      t_id = myPizza.value.findIndex((x)=>x.name==topping)
-      myPizza.value.splice(t_id, 1)
+      let t_id = selectedToppings.value.findIndex((x)=>x.name===topping)
+      selectedToppings.value.splice(t_id, 1);
+      let p_id = myPizza.value.findIndex((x)=>x?.name===topping);
+      myPizza.value.splice(p_id, 1);
     }
 
     async function addToOrder(){
@@ -148,6 +146,12 @@ export default defineComponent({
       }
       let rid = currentPassedId.value?currentPassedId.value: props.product.tags[0]+"_"+(Math.random() + 1).toString(36).substring(7);
       await shopStore.addToLocalCart(rid, myPizza.value)
+      $q.notify({
+          type: 'positive',
+          message: props.actionText,
+          progress: true,
+          // position:'top',
+        })
       emit('hideModal', false);
     }
     function handleBeforeShow  (){

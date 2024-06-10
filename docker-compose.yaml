@@ -1,23 +1,21 @@
-version: '3.9'
-
 services:
-  pizzarree_db:
-    image: postgres
-    container_name: pizzarree_db
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_HOST=pizzarree_db
-      - POSTGRES_USER=
-      - POSTGRES_PASSWORD=
-      - POSTGRES_DB=
-      - DATABASE_PORT=5432
-    ports:
-      - target: 5432
-        published: 5432
-        protocol: tcp
-        mode: host
-    restart: unless-stopped
+#  pizzarree_db:
+#    image: postgres
+#    container_name: pizzarree_db
+#    volumes:
+#      - postgres-data:/var/lib/postgresql/data
+#    environment:
+#      - POSTGRES_HOST=pizzarree_db
+#      - POSTGRES_USER=
+#      - POSTGRES_PASSWORD=
+#      - POSTGRES_DB=
+#      - DATABASE_PORT=5432
+#    ports:
+#      - target: 5432
+#        published: 5432
+#        protocol: tcp
+#        mode: host
+#    restart: unless-stopped
 
 
   backend:
@@ -25,65 +23,99 @@ services:
 #    build:
 #      context: ./pizzarree_api
       # dockerfile: ./pizzarree_api/Dockerfile
-    image: registry.secure-relay.online/pizzarree_api:latest
+#    image: pizzarree_full
+    image: registry.secure-relay.online/pizzarree:latest
     ports:
-      - target: 8000
-        published: 8000
+      - target: 8008
+        published: 8008
         protocol: tcp
         mode: host
     volumes:
       # dev
-#      - ./pizzarree_api:/code/app:z
+      - ./pizzarree_api:/code/app:z
       - ./docker_data/media/:/code/app/media/:rw
     environment:
       - DJANGO_FRONTEND_URL=localhost
       - DJANGO_ALLOWED_HOSTS=localhost,pizzarree.net,elife.mac
       - DJANGO_DEBUG=1
       - DJANGO_DOMAIN=localhost
-      - DJANGO_DATABASE_NAME=
-      - DJANGO_DATABASE_USER=
-      - DJANGO_DATABASE_PASSWORD=
-      - DJANGO_DATABASE_HOST=pizzarree_db
-      - DJANGO_DATABASE_PORT=5432
-      - DJANGO_CORS_ALLOWED_ORIGINS=https://elife.mac:8080,https://localhost:8080,http://localhost:8080,http://localhost:8081
-      - DJANGO_EMAIL_HOST=smtp.mailtrap.io
-      - DJANGO_EMAIL_PROT=2525
-      - DJANGO_EMAIL_HOST_USER=
-      - DJANGO_EMAIL_HOST_PASSWORD=
-      - DJANGO_STRIPE_API_SECRET=
-      - DJANGO_STRIPE_PUBLISHABLE_KEY=
-#    command: "uwsgi --https 0.0.0.0:8000,cert/server.crt,cert/server.key --wsgi-file pizzarree_api/wsgi.py --master --processes 4 --threads 2 --static-map /static=/code/app/static --static-map /media=/code/app/media --python-auto-reload=1"
-    command: "uwsgi --http 0.0.0.0:8000 --wsgi-file pizzarree_api/wsgi.py --master --processes 4 --threads 2 --static-map /static=/code/app/static --static-map /media=/code/app/media --python-auto-reload=1"
-    depends_on:
-      - pizzarree_db
+#      - DJANGO_DATABASE_NAME=
+#      - DJANGO_DATABASE_USER=
+#      - DJANGO_DATABASE_PASSWORD=
+#      - DJANGO_DATABASE_HOST=pizzarree_db
+#      - DJANGO_DATABASE_PORT=5432
+      - DJANGO_CORS_ALLOWED_ORIGINS=https://elife.mac:8080,https://localhost:8080,http://localhost:8080,https://localhost:8000
+#      - DJANGO_EMAIL_HOST=smtp.mailtrap.io
+#      - DJANGO_EMAIL_PROT=2525
+#      - DJANGO_EMAIL_HOST_USER=
+#      - DJANGO_EMAIL_HOST_PASSWORD=
+#      - DJANGO_STRIPE_API_SECRET=
+#      - DJANGO_STRIPE_PUBLISHABLE_KEY=
+    command: " uwsgi --https 0.0.0.0:8000,cert/server.crt,cert/server.key --wsgi-file pizzarree_api/wsgi.py --master --processes 2 --threads 2 --static-map /static=static --static-map /media=media --check-static=dist --python-auto-reload=1"
+#    command: "uwsgi --http 0.0.0.0:8000 --wsgi-file pizzarree_api/wsgi.py --master --processes 4 --threads 2 --static-map /static=/code/app/static --static-map /media=/code/app/media --python-auto-reload=1"
+#    depends_on:
+#      - pizzarree_db
+
+#
+#  frontend:
+#    container_name: frontend
+##    build:
+##      context: ./pizzarree
+##    image: registry.secure-relay.online/pizzarree_temp:latest
+##      dockerfile: ./pizzarree/Dockerfile_arm
+#    image: pizzaree_local
+#
+#    ports:
+#      - target: 80
+#        published: 8080
+#        protocol: tcp
+#        mode: host
+##    env_file:
+##      - ./pizzarree/.env
+#    environment:
+#      - VUE_APP_API_BASE_URL="http://localhost:8000/"
+#    volumes:
+#       - ./pizzarree:/app
+#    # command: "quasar dev -p 80"
+#    # command: "quasar serve dist/pwa --https --cert cert/server.crt --key cert/server.key -p 80"
+#    depends_on:
+#      - backend
 
 
-  frontend:
-    container_name: frontend
-#    build:
-#      context: ./pizzarree
-#    image: registry.secure-relay.online/pizzarree_temp:latest
-#      dockerfile: ./pizzarree/Dockerfile_arm
-    image: pizzaree_local
-
-    ports:
-      - target: 80
-        published: 8080
-        protocol: tcp
-        mode: host
-#    env_file:
-#      - ./pizzarree/.env
-    environment:
-      - VUE_APP_API_BASE_URL="http://localhost:8000/"
-    volumes:
-       - ./pizzarree:/app
-    # command: "quasar dev -p 80"
-    # command: "quasar serve dist/pwa --https --cert cert/server.crt --key cert/server.key -p 80"
-    depends_on:
-      - backend
-
-
-volumes:
-  postgres-data:
+#volumes:
+#  postgres-data:
  
 
+#  pizzarree_backend:
+#    container_name: pizzarree
+#    image: registry.secure-relay.online/pizzarree:latest
+#    restart: always
+#    ports:
+#      - target: 8000
+##        published: 8008
+#        protocol: tcp
+#        mode: host
+#    volumes:
+#      - /home/ubuntu/docker-data/demo-shop/media:/code/app/pizzarree_api/media:z
+#      - /home/ubuntu/docker-data/demo-shop/db.sqlite3:/code/app/pizzarree_api/db.sqlite3:z
+#    environment:
+#      - DJANGO_FRONTEND_URL=shop-demo.amdrs.link
+#      - DJANGO_ALLOWED_HOSTS=localhost,pizzarree_backend,pizzarree,amdrs.link,shop-demo.amdrs.link,shop-demo-api.amdrs.link,pizzarree_backend
+#      - DJANGO_DEBUG=0
+#      - DJANGO_DOMAIN=shop-demo-api.amdrs.link
+#
+#      - DJANGO_DATABASE_NAME=pizzarree_db
+#      - DJANGO_DATABASE_USER=pizzarree
+#      - DJANGO_DATABASE_PASSWORD=5f1c00d18ef9fa1e1a58488eb9b
+#      - DJANGO_DATABASE_HOST=pizzarree_db
+#      - DJANGO_DATABASE_PORT=5432
+#
+#      - DJANGO_CORS_ALLOWED_ORIGINS=https://localhost,http://localhost,https://amdrs.link,https://shop-demo.amdrs.link
+#      - DJANGO_EMAIL_HOST=smtp.mailgun.org
+#      - DJANGO_EMAIL_PROT=25
+#      - DJANGO_EMAIL_HOST_USER=postmaster@amdrs.link
+#      - DJANGO_EMAIL_HOST_PASSWORD=1ad981671e6b4da2e1090d0f09e45b3b-f68a26c9-bb7020ed
+#      - DJANGO_STRIPE_API_SECRET=sk_test_CHbkFTgQWREZlA5ff17sCy1Q
+#      - DJANGO_STRIPE_PUBLISHABLE_KEY=pk_test_RUZqAN8CkTK39VGr7FuIxPWE
+#
+#    command: " uwsgi --https 0.0.0.0:8000,cert/server.crt,cert/server.key --wsgi-file pizzarree_api/wsgi.py --master --processes 2 --threads 2 --static-map /static=static --static-map /media=media --check-static=dist --python-auto-reload=1"

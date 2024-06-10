@@ -31,6 +31,13 @@
           <q-item clickable v-for="link in linksList" :key="link.title" :to="{ name: link.link }"
                   active-class="text-secondary"
                   exact  v-ripple>
+
+
+              <q-badge color="secondary" floating transparent multi-line rounded align="middle"
+                       v-if=" link.title.toLowerCase()==='cart' && cartCount > 0">
+                {{cartCount}}
+              </q-badge>
+
             <q-item-section v-if="link.icon" avatar >
               <div class="tw-flex tw-flex-col tw-items-center">
                   <q-icon :name="link.icon" size="2rem" />
@@ -47,15 +54,17 @@
       </q-footer>
 
     <q-page-container>
+      <SuspenseWithErrors>
         <router-view />
+      </SuspenseWithErrors>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/partials/EssentialLink.vue'
+import {defineComponent, onMounted, ref, watch} from 'vue'
 import SuspenseWithErrors from "components/partials/SuspenseWithErrors.vue";
+import {useShopStore} from "stores/shop";
 
 const linksList = [
   {
@@ -81,12 +90,19 @@ const linksList = [
 
 export default defineComponent({
   name: 'ShopLayout',
-  // components:{SuspenseWithErrors, },
+  components: {SuspenseWithErrors},
   setup () {
     const leftDrawerOpen = ref(false)
+    const shopStore = useShopStore()
+    let currentCart = shopStore.getCart;
+    let cartCount = ref(shopStore.getCartItemsCount);
+    watch([currentCart],(_)=>{
+      cartCount.value = shopStore.getCartItemsCount;
+    } )
 
     return {
       linksList,
+      cartCount,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value

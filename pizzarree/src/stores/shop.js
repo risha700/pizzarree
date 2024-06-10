@@ -33,6 +33,13 @@ export const useShopStore = defineStore("shop", {
     getCart: (state) => {
       return state.cart
     },
+    getCartItemsCount: (state) => {
+      let count = 0;
+      Object.values(state.cart).forEach((item)=>{
+        count += item?.quantity||0;
+      })
+      return count;
+    },
     hasCurrentPendingOrder:(state)=>{
       // TODO: add  condition on user email
       return Object.keys(state.order).length > 0 && Object.hasOwnProperty(state.order, 'id') ;

@@ -44,7 +44,7 @@ export default defineComponent({
   components:{SuspenseWithErrors,
     MenuComponent: defineAsyncComponent(()=> import("components/shop/MenuComponent.vue")),
   },
-    setup(){
+    async setup(){
     const shopStore = useShopStore()
     const tab = ref("all")
     onMounted(async()=>{

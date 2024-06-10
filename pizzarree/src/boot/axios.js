@@ -24,6 +24,9 @@ export default boot(({ app }) => {
       config.headers.Authorization = `Token ${auth_token}`;
     }
 
+    if(config.url.charAt(config.url.length-1) !== '/'){
+      config.url = config.url + '/';
+    }
     let csrf_token =
       document.head.querySelector('meta[name="csrf-token"]') ||
       readCookie("csrftoken");

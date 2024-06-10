@@ -39,7 +39,9 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <SuspenseWithErrors>
+        <router-view />
+      </SuspenseWithErrors>
     </q-page-container>
   </q-layout>
 </template>
@@ -47,6 +49,7 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/partials/EssentialLink.vue'
+import SuspenseWithErrors from "components/partials/SuspenseWithErrors.vue";
 
 const linksList = [
     {
@@ -67,7 +70,7 @@ const linksList = [
 
 export default defineComponent({
   name: 'UserLayout',
-  components: {EssentialLink},
+  components: {SuspenseWithErrors, EssentialLink},
   setup () {
     const leftDrawerOpen = ref(false)
 
