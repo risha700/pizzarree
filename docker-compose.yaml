@@ -105,17 +105,17 @@ services:
 #      - DJANGO_DOMAIN=shop-demo-api.amdrs.link
 #
 #      - DJANGO_DATABASE_NAME=pizzarree_db
-#      - DJANGO_DATABASE_USER=pizzarree
-#      - DJANGO_DATABASE_PASSWORD=5f1c00d18ef9fa1e1a58488eb9b
+#      - DJANGO_DATABASE_USER=${db_user}
+#      - DJANGO_DATABASE_PASSWORD=${db_password}
 #      - DJANGO_DATABASE_HOST=pizzarree_db
 #      - DJANGO_DATABASE_PORT=5432
 #
 #      - DJANGO_CORS_ALLOWED_ORIGINS=https://localhost,http://localhost,https://amdrs.link,https://shop-demo.amdrs.link
 #      - DJANGO_EMAIL_HOST=smtp.mailgun.org
 #      - DJANGO_EMAIL_PROT=25
-#      - DJANGO_EMAIL_HOST_USER=postmaster@amdrs.link
-#      - DJANGO_EMAIL_HOST_PASSWORD=1ad981671e6b4da2e1090d0f09e45b3b-f68a26c9-bb7020ed
-#      - DJANGO_STRIPE_API_SECRET=sk_test_CHbkFTgQWREZlA5ff17sCy1Q
-#      - DJANGO_STRIPE_PUBLISHABLE_KEY=pk_test_RUZqAN8CkTK39VGr7FuIxPWE
+#      - DJANGO_EMAIL_HOST_USER=${email_user}
+#      - DJANGO_EMAIL_HOST_PASSWORD=${email_passowrd}
+#      - DJANGO_STRIPE_API_SECRET=${stripe_secret}
+#      - DJANGO_STRIPE_PUBLISHABLE_KEY=${stripe_publishable_key}
 #
 #    command: " uwsgi --https 0.0.0.0:8000,cert/server.crt,cert/server.key --wsgi-file pizzarree_api/wsgi.py --master --processes 2 --threads 2 --static-map /static=static --static-map /media=media --check-static=dist --python-auto-reload=1"
